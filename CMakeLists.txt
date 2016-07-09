@@ -5,6 +5,11 @@
 # which build all subdirectories (packages) in the order of
 # inter-package dependence.
 #
+# Before you build this project, please you need to set up
+# the dependent libraries following this doc:
+#
+#
+#
 # Now, you can build the F2M using the following commands:
 #
 # $> mkdir build
@@ -37,5 +42,14 @@ add_definitions(" -Wall -Wno-sign-compare -Werror -O3 ")
 set(CMAKE_INSTALL_PREFIX "home/alex/F2M_exe")
 
 #-------------------------------------------------------------------------------
+# Ensure executables are statically linked with libraries.
+#-------------------------------------------------------------------------------
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+  set(CMAKE_EXE_LINKER_FLAGS "-static -static-libgcc")
+endif()
+
+#-------------------------------------------------------------------------------
+# Set include paths and library paths.
 #
+# F2M depends on the following 
 #-------------------------------------------------------------------------------
