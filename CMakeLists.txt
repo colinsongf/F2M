@@ -70,7 +70,6 @@ endif()
 #
 # include_directories(
 #  "${PROJECT_SOURCE_DIR}"
-#  "${PROJECT_BINARY_DIR}"
 #  "${THIRD_PARTY_HEADER}"
 # )
 #
