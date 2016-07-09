@@ -8,7 +8,7 @@
 # Before you build this project, please you need to set up
 # the dependent libraries following this doc:
 #
-#
+#   https://github.com/aksnzhy/F2M/blob/master/doc/install.md
 #
 # Now, you can build the F2M using the following commands:
 #
