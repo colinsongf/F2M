@@ -51,5 +51,37 @@ endif()
 #-------------------------------------------------------------------------------
 # Set include paths and library paths.
 #
-# F2M depends on the following 
+# F2M depends on the following thirdparty libraries:
+#
+#  - gflags (command line args parser)
+#  - gtest (for unit test)
+#
+# You can install them using package management tools on your system,
+# or build them from source code by youself. We suggest you to take 
+# the first way. While, in either way, you need to tell  your compiler 
+# where these libraries were installed. If you use the package management 
+# tools, for example, on Mac OS X, Homebrew installs header files to
+# /usr/local/include and libraries to /usr/local/lib.
+# In this way, you can just use the following commands:
+#
+#  set(THIRD_PARTY_DIR "/usr/local")
+#  set(THIRD_PARTY_HEADER "${THIRD_PARTY_DIR}/include")
+#  set(THIRD_PARTY_LIB "${THIRD_PARTY_DIR}/lib")
+#
+# include_directories(
+#  "${PROJECT_SOURCE_DIR}"
+#  "${PROJECT_BINARY_DIR}"
+#  "${THIRD_PARTY_HEADER}"
+# )
+#
+# link_directories(
+#  "${PROJECT_BINARY_DIR}"
+#  "${THRID_PARTY_LIB}"
+# )
+#
+# F2M uses googletest framework for unit testing. As it is not recommand 
+# to build googletest as a system-wide library, we must import googletest
+# into our source code tree before building F2M.
+#
+# 
 #-------------------------------------------------------------------------------
