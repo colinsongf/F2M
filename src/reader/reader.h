@@ -57,6 +57,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <string>
 #include <vector>
 
+#include "src/common/common.h"
+
 namespace f2m {
     
 class Reader {
@@ -66,19 +68,22 @@ class Reader {
          bool in_memory = false)
     : filename_(filename),
       num_samples_(num_samples)
-    in_memory_(in_memory) {
-        
+      in_memory_(in_memory) 
+  {
+    CHECK_GT(num_samples_, 0);
   }
 
   ~Reader() {}
 
  // return N samples
-  vector<std::string*> DataSamples();
+  vector<std::string>* DataSamples();
 
  private:
-  std::string filename_;
-  int num_samples_;
-  bool in_memory_;
+  std::string filename_;    // identify the input file
+  int num_samples_;         // how many data samples can be return
+  bool in_memory_;          // whether load all the data into memory
+
+  
 };
 
 } // namespace f2m
