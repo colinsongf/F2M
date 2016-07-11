@@ -80,13 +80,13 @@ namespace f2m {
     
 class Reader {
  public:
-  Reader(std::string filename,
+  Reader(const std::string& filename,
          int num_samples,
          bool in_memory = false,        // Reader samples data from disk
          int size_memory_buffer = 0)    // file on defualt.
     : filename_(filename),
-      num_samples_(num_samples)
-      in_memory_(in_memory) 
+      num_samples_(num_samples),
+      in_memory_(in_memory), 
       size_memory_buffer_(size_memory_buffer)
   {
     CHECK_GT(num_samples_, 0);
@@ -100,9 +100,17 @@ class Reader {
         LOG(FATAL) << "Cannot allocate enough memory for Reader.";
       }
     }
+
+    // open file 
+
   }
 
-  ~Reader() {}
+  ~Reader() {
+    if (file_ptr_ !=  NULL) {
+      fclose(file_ptr_);
+      file_ptr_ = NULL;
+    } 
+  }
 
   // return a pointer to N lines of data samples
   vector<std::string>* DataSamples();
@@ -115,6 +123,9 @@ class Reader {
 
   FILE* file_ptr_;                     // maintain current file pointer
   scoped_array<char> memory_buffer_;   // in-memory buffer
+
+
+  void Close()
   
 };
 
