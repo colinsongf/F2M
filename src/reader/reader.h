@@ -58,7 +58,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     
        Data = reader.Samples(); // return N data samples from memory
 
-       ... use the dat samples to train model
+       ... use the data samples to train model
 
     }
 */
@@ -82,8 +82,8 @@ class Reader {
  public:
   Reader(std::string filename,
          int num_samples,
-         bool in_memory = false
-         int size_memory_buffer = 0)
+         bool in_memory = false,        // Reader samples data from disk
+         int size_memory_buffer = 0)    // file on defualt.
     : filename_(filename),
       num_samples_(num_samples)
       in_memory_(in_memory) 
@@ -92,8 +92,13 @@ class Reader {
     CHECK_GT(num_samples_, 0);
     CHECK_GE(size_memory_buffer_, 0);
 
+    // allocate memory for buffer
     if (in_memory_) {
-
+      try {
+        memory_buffer_.reset(new char[size_memory_buffer_]);  
+      } catch {
+        LOG(FATAL) << "Cannot allocate enough memory for Reader.";
+      }
     }
   }
 
