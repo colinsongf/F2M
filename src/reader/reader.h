@@ -76,8 +76,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include "src/common/common.h"
 
 namespace f2m {
-    
-typedef std::vector<std::string> Samples;
+
+typedef std::vector<std::string> StringList;
 
 class Reader {
  public:
@@ -89,7 +89,7 @@ class Reader {
   ~Reader();
 
   // return a pointer to N lines of data samples
-  Samples* Samples();
+  StringList* Samples();
 
  private:
   std::string filename_;    // identify the input file
@@ -100,10 +100,10 @@ class Reader {
   FILE* file_ptr_;        // maintain current file pointer
   char* memory_buffer_;   // in-memory buffer
 
-  Samples* data_samples_;   // current data samples
+  StringList* data_samples_;   // current data samples
 
-  Samples* SampleFromDisk();
-  Samples* SampleFromMemory();
+  StringList* SampleFromDisk();
+  StringList* SampleFromMemory();
  
   DISALLOW_COPY_AND_ASSIGN(Reader);
 };

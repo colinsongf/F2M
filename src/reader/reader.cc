@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include "src/common/common.h"
 #include "src/common/file_utils.h"
+#include "src/common/stl-util.h"
 
 namespace f2m {
 
@@ -36,7 +37,7 @@ Reader::Reader(const std::string& filename,
   CHECK_GT(num_samples_, 0);
   CHECK_GE(size_memory_buffer_, 0);
 
-  data_samples_ = new Samples(num_samples_);
+  data_samples_ = new StringList(num_samples_);
 
   // allocate memory for buffer
   if (in_memory_) {
@@ -60,19 +61,21 @@ Reader::~Reader() {
     file_ptr_ = NULL;
   }
 
+  delete memory_buffer_;
+
   delete data_samples_;
 }
 
-Samples* Reader::Samples() {
+StringList* Reader::Samples() {
   return in_memory_ ? SampleFromMemory() : 
                       SampleFromDisk();
 }
 
-Samples* Reader::SampleFromDisk() {
+StringList* Reader::SampleFromDisk() {
 
 }
 
-Samples* Reader::SampleFromMemory() {
+StringList* Reader::SampleFromMemory() {
     
 }
 
