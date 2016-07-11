@@ -101,8 +101,11 @@ class Reader {
       }
     }
 
-    // open file 
+    // open file and read data to memory (if needed)
+    file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
+    if (in_memory_) {
 
+    }
   }
 
   ~Reader() {
