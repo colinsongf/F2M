@@ -52,8 +52,8 @@ Reader::Reader(const std::string& filename,
   // open file and read all data into memory (if needed)
   file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
   if (in_memory_) {
-    result = fread(memory_buffer_, 1, 
-                   size_memory_buffer_, file_ptr_);
+    uint64 result = fread(memory_buffer_, 1, 
+                          size_memory_buffer_, file_ptr_);
     if (result != size_memory_buffer_) {
       LOG(FATAL) << "Read file error.";
     }
