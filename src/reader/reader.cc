@@ -33,18 +33,18 @@ Reader::Reader(const std::string& filename,
 
   // allocate memory for buffer
   if (in_memory_) {
-      try {
-        memory_buffer_.reset(new char[size_memory_buffer_]);  
-      } catch {
-        LOG(FATAL) << "Cannot allocate enough memory for Reader.";
-      }
+    try {
+      memory_buffer_.reset(new char[size_memory_buffer_]);  
+    } catch {
+      LOG(FATAL) << "Cannot allocate enough memory for Reader.";
     }
+  }
 
-    // open file and read data to memory (if needed)
-    file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
-    if (in_memory_) {
+  // open file and read data to memory (if needed)
+  file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
+  if (in_memory_) {
 
-    }
+  }
 }
 
 Reader::~Reader() {
