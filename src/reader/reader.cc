@@ -106,21 +106,7 @@ StringList* Reader::SampleFromDisk() {
   return data_samples_;
 }
 
-StringList* Reader::SampleFromMemory() {
-  static char* line = new char[kDefaultMaxSizeLine];
-  // read num_samples_ lines of data from memory
-  for (int i = 0; i < num_samples_; ++i) {
-    int read_size = ReadLine(line, memory_buffer_, size_memory_buffer_);    
-    line[read_size - 1] = '\0';
-    if (read_size > 1 && line[read_size - 2] == '\r') { // Handle DOS text format.
-      line[read_size - 2] = '\0';
-    }
-    (*data_samples_)[i].assign(line);
-  }
-  return data_samples_; 
-}
-
-int ReadLine(char* &line, char* buf, uint64 buf_len) {
+int ReadLine(char* line, char* buf, uint64 buf_len) {
   static uint64 start_position = 0;
   static uint64 end_position = 0;
   // End of the buffer, return to the head
@@ -137,6 +123,20 @@ int ReadLine(char* &line, char* buf, uint64 buf_len) {
   memcpy(line, buf + start_position, end_position - start_position);
   start_position = ++end_position;
   return read_size;
+}
+
+StringList* Reader::SampleFromMemory() {
+  static char* line = new char[kDefaultMaxSizeLine];
+  // read num_samples_ lines of data from memory
+  for (int i = 0; i < num_samples_; ++i) {
+    int read_size = ReadLine(line, memory_buffer_, size_memory_buffer_);    
+    line[read_size - 1] = '\0';
+    if (read_size > 1 && line[read_size - 2] == '\r') { // Handle DOS text format.
+      line[read_size - 2] = '\0';
+    }
+    (*data_samples_)[i].assign(line);
+  }
+  return data_samples_; 
 }
 
 } // namespace f2m
