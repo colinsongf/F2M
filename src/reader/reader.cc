@@ -90,6 +90,7 @@ StringList* Reader::SampleFromDisk() {
       // return to the start of the file.
       fseek(file_ptr_, 0, SEEK_SET);
       i--; // re-read
+      continue;
     }
     int read_size = strlen(line);
     if (line[read_size - 1] != '\n') {
