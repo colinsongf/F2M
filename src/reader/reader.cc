@@ -19,31 +19,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //
 #include "src/reader/reader.h"
 
+#include "src/common/common.h"
+#include "src/common/file_utils.h"
+
+namespace f2m {
+
 Reader::Reader(const std::string& filename,
                int num_samples,
                bool in_memory,
                int size_memory_buffer)
-  : filename_(filename_),
+  : filename_(filename),
     num_samples_(num_samples),
-    in_memory_(in_memory_),
+    in_memory_(in_memory),
     size_memory_buffer_(size_memory_buffer) 
 {
   CHECK_GT(num_samples_, 0);
   CHECK_GE(size_memory_buffer_, 0);
 
+  data_samples_ = new Samples(num_samples_);
+
   // allocate memory for buffer
   if (in_memory_) {
     try {
-      memory_buffer_.reset(new char[size_memory_buffer_]);  
-    } catch {
+      memory_buffer_ = new char[size_memory_buffer_];
+    } catch(std::bad_alloc&) {
       LOG(FATAL) << "Cannot allocate enough memory for Reader.";
     }
   }
 
-  // open file and read data to memory (if needed)
+  // open file and read all data into memory (if needed)
   file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
   if (in_memory_) {
-
+      
   }
 }
 
@@ -52,4 +59,21 @@ Reader::~Reader() {
     fclose(file_ptr_);
     file_ptr_ = NULL;
   }
+
+  delete data_samples_;
 }
+
+Samples* Reader::Samples() {
+  return in_memory_ ? SampleFromMemory() : 
+                      SampleFromDisk();
+}
+
+Samples* Reader::SampleFromDisk() {
+
+}
+
+Samples* Reader::SampleFromMemory() {
+    
+}
+
+} // namespace f2m
