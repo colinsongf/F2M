@@ -82,38 +82,10 @@ class Reader {
  public:
   Reader(const std::string& filename,
          int num_samples,
-         bool in_memory = false,        // Reader samples data from disk
-         int size_memory_buffer = 0)    // file on defualt.
-    : filename_(filename),
-      num_samples_(num_samples),
-      in_memory_(in_memory), 
-      size_memory_buffer_(size_memory_buffer)
-  {
-    CHECK_GT(num_samples_, 0);
-    CHECK_GE(size_memory_buffer_, 0);
+         bool in_memory = false,         // Reader samples data from disk
+         int size_memory_buffer = 0);    // file on defualt.
 
-    // allocate memory for buffer
-    if (in_memory_) {
-      try {
-        memory_buffer_.reset(new char[size_memory_buffer_]);  
-      } catch {
-        LOG(FATAL) << "Cannot allocate enough memory for Reader.";
-      }
-    }
-
-    // open file and read data to memory (if needed)
-    file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
-    if (in_memory_) {
-
-    }
-  }
-
-  ~Reader() {
-    if (file_ptr_ !=  NULL) {
-      fclose(file_ptr_);
-      file_ptr_ = NULL;
-    } 
-  }
+  ~Reader();
 
   // return a pointer to N lines of data samples
   vector<std::string>* DataSamples();
@@ -126,9 +98,6 @@ class Reader {
 
   FILE* file_ptr_;                     // maintain current file pointer
   scoped_array<char> memory_buffer_;   // in-memory buffer
-
-
-  void Close()
   
 };
 

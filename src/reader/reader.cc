@@ -17,3 +17,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // Copyright (c) 2016 by contributors.
 // Author: Chao Ma (mctt90@gmail.com)
 //
+#include "src/reader/reader.h"
+
+Reader::Reader(const std::string& filename,
+               int num_samples,
+               bool in_memory,
+               int size_memory_buffer)
+  : filename_(filename_),
+    num_samples_(num_samples),
+    in_memory_(in_memory_),
+    size_memory_buffer_(size_memory_buffer) 
+{
+  CHECK_GT(num_samples_, 0);
+  CHECK_GE(size_memory_buffer_, 0);
+
+  // allocate memory for buffer
+  if (in_memory_) {
+      try {
+        memory_buffer_.reset(new char[size_memory_buffer_]);  
+      } catch {
+        LOG(FATAL) << "Cannot allocate enough memory for Reader.";
+      }
+    }
+
+    // open file and read data to memory (if needed)
+    file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
+    if (in_memory_) {
+
+    }
+}
+
+Reader::~Reader() {
+  if (file_ptr_ != NULL) {
+    fclose(file_ptr_);
+    file_ptr_ = NULL;
+  }
+}
