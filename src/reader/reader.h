@@ -95,8 +95,8 @@ class Reader {
   bool in_memory_;             // whether load all the data into memory
   uint64 size_memory_buffer_;  // the size of the memory buffer
 
-  FILE* file_ptr_;        // maintain current file pointer
-  char* memory_buffer_;   // in-memory buffer
+  FILE* file_ptr_;             // maintain current file pointer
+  char* memory_buffer_;        // in-memory buffer
   
   StringList* data_samples_;   // current data samples
 

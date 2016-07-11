@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 namespace f2m {
 
+const int kDefaultMaxSizeLine = 100 * 1024; // 100 KB
+
 Reader::Reader(const std::string& filename,
                int num_samples,
                bool in_memory)
@@ -35,6 +37,8 @@ Reader::Reader(const std::string& filename,
   CHECK_GT(num_samples_, 0);
 
   data_samples_ = new StringList(num_samples_);
+
+  file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
 
   // allocate memory for buffer
   if (in_memory_) {
@@ -49,8 +53,7 @@ Reader::Reader(const std::string& filename,
     }
   }
 
-  // open file and read all data into memory (if needed)
-  file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
+  // read all data into memory (if needed)
   if (in_memory_) {
     uint64 result = fread(memory_buffer_, 1, 
                           size_memory_buffer_, file_ptr_);
@@ -77,7 +80,15 @@ StringList* Reader::Samples() {
 }
 
 StringList* Reader::SampleFromDisk() {
-
+  static char* line = new char[kDefaultMaxSizeLine];
+  // read num_samples_ lines of data from disk file.
+  for (int i = 0; i < num_samples_; ++i) {
+    if (fgets(line, kDefaultMaxSizeLine, file_ptr_) == NULL) {
+      // Either ferror or feof. Anyway, 
+      // return to the start of the file.
+      fseek()
+    }
+  }
 }
 
 StringList* Reader::SampleFromMemory() {
