@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //
 #include "src/reader/reader.h"
 
+#include <string.h>
+
 #include "src/common/common.h"
 #include "src/common/file_utils.h"
 #include "src/common/stl-util.h"
@@ -89,7 +91,18 @@ StringList* Reader::SampleFromDisk() {
       fseek(file_ptr_, 0, SEEK_SET);
       i--; // re-read
     }
+    int read_size = strlen(line);
+    if (line[read_size - 1] != '\n') {
+      LOG(FATAL) << "Encountered a too-long line..";
+    } else {
+      line[read_size - 1] = '\0';
+      if (read_size > 1 && line[read_size - 2] == '\r') { // Handle DOS text format.
+        line[read_size - 2] = '\0';
+      }
+    }
+    (*data_samples_)[i].assign(line);
   }
+  return data_samples_;
 }
 
 StringList* Reader::SampleFromMemory() {
