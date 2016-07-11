@@ -24,13 +24,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     #include "reader.h"
 
     // Constructor
-    Reader reader(file_name = "/tmp/testdata", 
-                  num_samples = 100, 
-                  in_memory = true or false); 
+    Reader reader(filename = "/tmp/testdata", 
+                  num_samples = 100); 
 
     Loop until converge {
 
-       Data = reader.Samples(); // return N data samples
+       Data = reader.Samples(); // return N data samples from disk file
 
        ... use the data samples
        
@@ -44,8 +43,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //   others indicate that we use mini-batch GD.
 //
 // Before sampling, we can load all data into memory if the capacity
-// of your main memory is big enough for current training task.
+// of your main memory is big enough for current training task:
 //
+/*
+    #include "reader.h"
+
+    // Constructor
+    Reader reader(filename = "/tmp/testdata",
+                  num_samples = 100,
+                  in_memory = true,
+                  size_memory_buffer = 5 * 1024 * 1024 * 1024); // size = 5 GB
+
+    Loop until converge {
+    
+       Data = reader.Samples(); // return N data samples from memory
+
+       ... use the dat samples
+
+    }
+*/
 // Reader is an algorithm-agnostic class and can mask the details of
 // the data source (on disk or in memory), and it is flexible for 
 // different gradient descent methods (e.g., SGD, mini-batch GD, and 
