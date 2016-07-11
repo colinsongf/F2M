@@ -58,6 +58,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <vector>
 
 #include "src/common/common.h"
+#include "src/common/scoped_ptr.h"
 
 namespace f2m {
     
@@ -65,24 +66,34 @@ class Reader {
  public:
   Reader(std::string filename,
          int num_samples,
-         bool in_memory = false)
+         bool in_memory = false
+         int size_memory_buffer = 0)
     : filename_(filename),
       num_samples_(num_samples)
       in_memory_(in_memory) 
+      size_memory_buffer_(size_memory_buffer)
   {
     CHECK_GT(num_samples_, 0);
+    CHECK_GE(size_memory_buffer_, 0);
+
+    if (in_memory_) {
+
+    }
   }
 
   ~Reader() {}
 
- // return N samples
+  // return a pointer to N lines of data samples
   vector<std::string>* DataSamples();
 
  private:
   std::string filename_;    // identify the input file
   int num_samples_;         // how many data samples can be return
   bool in_memory_;          // whether load all the data into memory
+  int size_memory_buffer_;  // the size of the memory buffer
 
+  FILE* file_ptr_;                     // maintain current file pointer
+  scoped_array<char> memory_buffer_;   // in-memory buffer
   
 };
 
