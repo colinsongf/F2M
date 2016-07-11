@@ -106,7 +106,7 @@ StringList* Reader::SampleFromDisk() {
   return data_samples_;
 }
 
-int ReadLine(char* line, char* buf, uint64 buf_len) {
+int ReadLineFromMemory(char* line, char* buf, uint64 buf_len) {
   static uint64 start_position = 0;
   static uint64 end_position = 0;
   // End of the buffer, return to the head
@@ -129,7 +129,8 @@ StringList* Reader::SampleFromMemory() {
   static char* line = new char[kDefaultMaxSizeLine];
   // read num_samples_ lines of data from memory
   for (int i = 0; i < num_samples_; ++i) {
-    int read_size = ReadLine(line, memory_buffer_, size_memory_buffer_);    
+    int read_size = ReadLineFromMemory(line, memory_buffer_, 
+                                       size_memory_buffer_);
     line[read_size - 1] = '\0';
     if (read_size > 1 && line[read_size - 2] == '\r') { // Handle DOS text format.
       line[read_size - 2] = '\0';
