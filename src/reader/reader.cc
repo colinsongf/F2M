@@ -27,20 +27,21 @@ namespace f2m {
 
 Reader::Reader(const std::string& filename,
                int num_samples,
-               bool in_memory,
-               int size_memory_buffer)
+               bool in_memory)
   : filename_(filename),
     num_samples_(num_samples),
-    in_memory_(in_memory),
-    size_memory_buffer_(size_memory_buffer) 
+    in_memory_(in_memory)
 {
   CHECK_GT(num_samples_, 0);
-  CHECK_GE(size_memory_buffer_, 0);
 
   data_samples_ = new StringList(num_samples_);
 
   // allocate memory for buffer
   if (in_memory_) {
+    // get the size of current file
+    fseek(file_ptr_, 0, SEEK_END);
+    size_memory_buffer_ = ftell(file_ptr_);
+    rewind(file_ptr_);
     try {
       memory_buffer_ = new char[size_memory_buffer_];
     } catch(std::bad_alloc&) {
@@ -51,7 +52,11 @@ Reader::Reader(const std::string& filename,
   // open file and read all data into memory (if needed)
   file_ptr_ = OpenFileOrDie(filename_.c_str(), "r");
   if (in_memory_) {
-      
+    result = fread(memory_buffer_, 1, 
+                   size_memory_buffer_, file_ptr_);
+    if (result != size_memory_buffer_) {
+      LOG(FATAL) << "Read file error.";
+    }
   }
 }
 

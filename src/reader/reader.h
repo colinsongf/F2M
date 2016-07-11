@@ -51,8 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     // Constructor
     Reader reader(filename = "/tmp/testdata",
                   num_samples = 100,
-                  in_memory = true,
-                  size_memory_buffer = 5 * 1024 * 1024 * 1024); // size = 5 GB
+                  in_memory = true); // read from memory
 
     Loop until converge {
     
@@ -83,8 +82,7 @@ class Reader {
  public:
   Reader(const std::string& filename,
          int num_samples,
-         bool in_memory = false,         // Reader samples data from disk
-         int size_memory_buffer = 0);    // file on defualt.
+         bool in_memory = false)  // Reader samples data from disk file on defualt.
 
   ~Reader();
 
@@ -92,14 +90,14 @@ class Reader {
   StringList* Samples();
 
  private:
-  std::string filename_;    // identify the input file
-  int num_samples_;         // how many data samples can be return
-  bool in_memory_;          // whether load all the data into memory
-  int size_memory_buffer_;  // the size of the memory buffer
+  std::string filename_;       // identify the input file
+  int num_samples_;            // how many data samples can be return
+  bool in_memory_;             // whether load all the data into memory
+  uint64 size_memory_buffer_;  // the size of the memory buffer
 
   FILE* file_ptr_;        // maintain current file pointer
   char* memory_buffer_;   // in-memory buffer
-
+  
   StringList* data_samples_;   // current data samples
 
   StringList* SampleFromDisk();
