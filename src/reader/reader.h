@@ -31,7 +31,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
        Data = reader.Samples(); // return N data samples from disk file
 
-       ... use the data samples
+       ... use the data samples to train model
        
     }
 */
@@ -58,7 +58,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     
        Data = reader.Samples(); // return N data samples from memory
 
-       ... use the dat samples
+       ... use the dat samples to train model
 
     }
 */
