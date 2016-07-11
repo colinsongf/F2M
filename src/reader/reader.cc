@@ -86,7 +86,8 @@ StringList* Reader::SampleFromDisk() {
     if (fgets(line, kDefaultMaxSizeLine, file_ptr_) == NULL) {
       // Either ferror or feof. Anyway, 
       // return to the start of the file.
-      fseek()
+      fseek(file_ptr_, 0, SEEK_SET);
+      i--; // re-read
     }
   }
 }
