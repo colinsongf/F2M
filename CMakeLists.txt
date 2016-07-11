@@ -70,6 +70,7 @@ endif()
 #
 # include_directories(
 #  "${PROJECT_SOURCE_DIR}"
+#  "${PROJECT_SOURCE_DIR}/src/gtest/include"
 #  "${THIRD_PARTY_HEADER}"
 # )
 #
@@ -82,5 +83,32 @@ endif()
 # to build googletest as a system-wide library, we must import googletest
 # into our source code tree before building F2M.
 #
-# 
 #-------------------------------------------------------------------------------
+#
+# This is the configuration of my Mac OS X using Homebrew:
+#
+
+set(THIRD_PARTY_DIR "/usr/local")
+set(THIRD_PARTY_HEADER "${THIRD_PARTY_DIR}/include")
+set(THIRD_PARTY_LIB "${THIRD_PARTY_DIR}/lib")
+
+include_directories(
+  "${PROJECT_SOURCE_DIR}"
+  "${PROJECT_SOURCE_DIR}/src/gtest/include"
+  "${THIRD_PARTY_HEADER}"
+  )
+
+link_directories(
+  "${PROJECT_BINARY_DIR}"
+  "${THIRD_PARTY_LIB}"
+  )
+
+#-------------------------------------------------------------------------------
+# Declare packages in F2M project.
+#-------------------------------------------------------------------------------
+add_subdirectory(src/gtest)
+add_subdirectory(src/loss)
+add_subdirectory(src/reader)
+add_subdirectory(src/train)
+add_subdirectory(src/updater)
+add_subdirectory(src/validate)
