@@ -124,7 +124,7 @@ int ReadLineFromMemory(char* line, char* buf, uint64 buf_len) {
   if (read_size > kDefaultMaxSizeLine) {
     LOG(FATAL) << "Encountered a too-long line..";   
   }
-  memcpy(line, buf + start_position, end_position - start_position);
+  memcpy(line, buf + start_position, read_size);
   start_position = ++end_position;
   return read_size;
 }
