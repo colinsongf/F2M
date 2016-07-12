@@ -19,11 +19,36 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //
 // Unit Test for Reader (reader.h and reader.cc)
 //
+// We write some data to a file, then check the sample result.
+//
 #include "gtest/gtest.h"
 
 #include "src/reader/reader.h"
 
+#include <string>
+#include <fstream>
+
 using f2m::reader;
+
+const std::string filename = "/tmp/reader-test.txt";
+
+const int num_data = 6;
+
+const std::string testdata[num_data] = { "apple", "banana", "cat",
+                                         "orange", "Pig", "Cake" };
+
+const int num_samples = 1;
+
+class ReaderTest : public ::testing::Test {
+ protected:
+  virtual void SetUp() { // Write some data to a temp file.
+    ofstream file;
+    file.open(filename.c_str());
+    for (int i = 0; i < num_data; ++i) {
+      file << testdata[i] << "\n";
+    }
+  }
+};
 
 TEST(ReaderTest, SampleFromDisk) {
   
