@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <fstream>
 
 using f2m::reader;
+using f2m::StringList;
 
 const std::string filename = "/tmp/reader-test.txt";
 
@@ -50,9 +51,19 @@ class ReaderTest : public ::testing::Test {
 };
 
 TEST(ReaderTest, SampleFromDisk) {
-  
+  StringList *samples = NULL;
+  Reader reader(filename, num_samples);
+  for (int i = 0; i < num_data; ++i) {
+    samples = reader.Samples();
+    EXPECT_EQ((*samples)[i], testdata[i]);
+  }
 }
 
 TEST(ReaderTest, SampleFromMemory) {
-
+  StringList *samples = NULL;
+  Reader reader(filename, num_samples, true);
+  for (int i = 0; i < num_data; ++i) {
+    samples = reader.Samples();
+    EXPECT_EQ((*samples)[i], testdata[i]);
+  }
 }
