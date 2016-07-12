@@ -52,7 +52,7 @@ class ReaderTest : public ::testing::Test {
 
 TEST(ReaderTest, SampleFromDisk) {
   StringList *samples = NULL;
-  Reader reader(filename, num_samples);
+  Reader reader(filename, 1); // sample one data at each time
   for (int i = 0; i < num_data; ++i) {
     samples = reader.Samples();
     EXPECT_EQ((*samples)[i], testdata[i]);
@@ -61,7 +61,7 @@ TEST(ReaderTest, SampleFromDisk) {
 
 TEST(ReaderTest, SampleFromMemory) {
   StringList *samples = NULL;
-  Reader reader(filename, num_samples, true);
+  Reader reader(filename, 1, true);
   for (int i = 0; i < num_data; ++i) {
     samples = reader.Samples();
     EXPECT_EQ((*samples)[i], testdata[i]);
