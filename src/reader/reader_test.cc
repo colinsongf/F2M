@@ -36,7 +36,6 @@ const int num_data = 6;
 
 const std::string testdata[num_data] = { "apple", "banana", "cat",
                                          "orange", "Pig", "Cake" };
-
 const int num_samples = 1;
 
 class ReaderTest : public ::testing::Test {
