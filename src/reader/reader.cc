@@ -53,7 +53,7 @@ Reader::Reader(const std::string& filename,
     } catch(std::bad_alloc&) {
       LOG(FATAL) << "Cannot allocate enough memory for Reader.";
     }
-  } else {
+  } else { // do not use memory buffer
     memory_buffer_ = NULL;
   }
 
