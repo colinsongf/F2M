@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     }
 */
 //
-// We can set the number of N in Reader class:
+// We can set the number of N in construct funtion of Reader:
 // 
 //   N = 1 indicates that we use SGD.
 //   N = total_samples indicates that we use Bactch GD.
