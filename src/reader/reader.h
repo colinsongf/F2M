@@ -91,8 +91,8 @@ class Reader {
 
  private:
   std::string filename_;       // identify the input file
-  int num_samples_;            // how many data samples can be return
-  bool in_memory_;             // whether load all the data into memory
+  int num_samples_;            // how many data samples return to user
+  bool in_memory_;             // whether load all data into memory
 
   FILE* file_ptr_;             // maintain current file pointer
   char* memory_buffer_;        // in-memory buffer
