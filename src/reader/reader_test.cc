@@ -17,3 +17,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // Copyright (c) 2016 by contributors.
 // Author: Chao Ma (mctt90@gmail.com)
 //
+// Unit Test for Reader (reader.h and reader.cc)
+//
+#include "gtest/gtest.h"
+
+#include "src/reader/reader.h"
+
+using f2m::reader;
+
+TEST(ReaderTest, SampleFromDisk) {
+  
+}
+
+TEST(ReaderTest, SampleFromMemory) {
+
+}
