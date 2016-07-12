@@ -53,6 +53,8 @@ Reader::Reader(const std::string& filename,
     } catch(std::bad_alloc&) {
       LOG(FATAL) << "Cannot allocate enough memory for Reader.";
     }
+  } else {
+    memory_buffer_ = NULL;
   }
 
   // read all data into memory (if needed)
@@ -71,7 +73,9 @@ Reader::~Reader() {
     file_ptr_ = NULL;
   }
 
-  delete memory_buffer_;
+  if (memory_buffer_ != NULL) {
+    delete memory_buffer_;
+  }
 
   delete data_samples_;
 }

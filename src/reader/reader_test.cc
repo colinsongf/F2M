@@ -37,9 +37,10 @@ TEST(ReaderTest, SampleFromDisk) {
   Reader reader("testdata.txt", kNumSamples);
   for (int i = 0; i < kNumIteration; ++i) {
     samples = reader.Samples();
-    for (int n = 0; n < samples->size(); ++i) {
-      cout << (*samples)[n] << "\n";
-    }
+    //for (int n = 0; n < samples->size(); ++i) {
+      //cout << (*samples)[n] << "\n";
+   //}
+    cout << samples->size() << endl;
   }
 }
 

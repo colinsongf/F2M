@@ -109,6 +109,7 @@ link_directories(
 # Declare packages in F2M project.
 #-------------------------------------------------------------------------------
 add_subdirectory(src/gtest)
+add_subdirectory(src/common)
 add_subdirectory(src/loss)
 add_subdirectory(src/reader)
 add_subdirectory(src/train)
