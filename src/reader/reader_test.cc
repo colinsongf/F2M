@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <string>
 #include <fstream>
 
-using f2m::reader;
+using f2m::Reader;
 using f2m::StringList;
 
 const std::string filename = "/tmp/reader-test.txt";
@@ -37,12 +37,11 @@ const int num_data = 6;
 
 const std::string testdata[num_data] = { "apple", "banana", "cat",
                                          "orange", "Pig", "Cake" };
-const int num_samples = 1;
 
 class ReaderTest : public ::testing::Test {
  protected:
   virtual void SetUp() { // Write some data to a temp file.
-    ofstream file;
+    std::ofstream file;
     file.open(filename.c_str());
     for (int i = 0; i < num_data; ++i) {
       file << testdata[i] << "\n";
@@ -50,20 +49,20 @@ class ReaderTest : public ::testing::Test {
   }
 };
 
-TEST(ReaderTest, SampleFromDisk) {
+TEST_F(ReaderTest, SampleFromDisk) {
   StringList *samples = NULL;
-  Reader reader(filename, 1); // sample one data at each time
+  Reader reader(filename, 1); // sample one record at each time.
   for (int i = 0; i < num_data; ++i) {
     samples = reader.Samples();
-    EXPECT_EQ((*samples)[i], testdata[i]);
+    EXPECT_EQ((*samples)[0], testdata[i]);
   }
 }
 
-TEST(ReaderTest, SampleFromMemory) {
+TEST_F(ReaderTest, SampleFromMemory) {
   StringList *samples = NULL;
   Reader reader(filename, 1, true);
   for (int i = 0; i < num_data; ++i) {
     samples = reader.Samples();
-    EXPECT_EQ((*samples)[i], testdata[i]);
+    EXPECT_EQ((*samples)[0], testdata[i]);
   }
 }
