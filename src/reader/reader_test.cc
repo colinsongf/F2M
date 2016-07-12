@@ -34,18 +34,26 @@ namespace f2m {
 
 TEST(ReaderTest, SampleFromDisk) {
   StringList *samples = NULL;
-  Reader reader("testdata.txt", kNumSamples);
+  Reader reader("test.txt", kNumSamples);
   for (int i = 0; i < kNumIteration; ++i) {
     samples = reader.Samples();
-    //for (int n = 0; n < samples->size(); ++i) {
-      //cout << (*samples)[n] << "\n";
-   //}
-    cout << samples->size() << endl;
+    for (int n = 0; n < samples->size(); ++n) {
+      cout << "line: " << (*samples)[n] << endl;
+    }
   }
+  cout << endl;
 }
 
 TEST(ReaderTest, SampleFromMemory) {
-
+  StringList *samples = NULL;
+  Reader reader("test.txt", kNumSamples, true);
+  for (int i = 0 ; i < kNumIteration; ++i) {
+    samples = reader.Samples();
+    for (int n = 0 ; n < samples->size(); ++n) {
+      cout << "line: " << (*samples)[n] << endl;
+    }
+  }
+  cout << endl;
 }
 
 }
