@@ -34,8 +34,8 @@ Reader::Reader(const std::string& filename,
                bool in_memory)
   : filename_(filename),
     num_samples_(num_samples),
-    in_memory_(in_memory)
-{
+    in_memory_(in_memory) {
+
   CHECK_GT(num_samples_, 0);
 
   data_samples_ = new StringList(num_samples_);
