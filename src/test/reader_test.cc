@@ -34,7 +34,7 @@ namespace f2m {
 
 TEST(ReaderTest, SampleFromDisk) {
   StringList *samples = NULL;
-  Reader reader("test.txt", kNumSamples);
+  Reader reader("testdata.txt", kNumSamples);
   for (int i = 0; i < kNumIteration; ++i) {
     samples = reader.Samples();
     for (int n = 0; n < samples->size(); ++n) {
@@ -46,7 +46,7 @@ TEST(ReaderTest, SampleFromDisk) {
 
 TEST(ReaderTest, SampleFromMemory) {
   StringList *samples = NULL;
-  Reader reader("test.txt", kNumSamples, true);
+  Reader reader("testdata.txt", kNumSamples, true);
   for (int i = 0 ; i < kNumIteration; ++i) {
     samples = reader.Samples();
     for (int n = 0 ; n < samples->size(); ++n) {
