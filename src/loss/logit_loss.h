@@ -16,27 +16,3 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 // Copyright (c) 2016 by contributors.
 // Author: Chao Ma (mctt90@gmail.com)
-//
-//  Loss is an abstract class, which will be implemented
-//  by ``real" loss class such as logistic loss, FM loss, and
-//  FFM loss.
-//
-//  For a loss class, there are 3 core functions:
-//
-//    1. LogLoss function:  LogLoss (w, x, y)
-//    2. Hypothesis function: H (w, x)
-//    3. Gradient function: CalGrad (w, x, y)
-//
-#ifndef F2M_LOSS_LOSS_H_
-#define F2M_LOSS_LOSS_H_
-
-namespace f2m {
-    
-class Loss {
-
-};
-
-
-} // namespace f2m
-
-#endif // F2M_LOSS_LOSS_H_
