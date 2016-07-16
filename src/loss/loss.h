@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //  by ``real" loss class such as logistic loss, FM loss, and
 //  FFM loss.
 //
-//  For a loss class, there are 3 core functions:
+//  For a Loss class, we focus 3 core functions:
 //
 //    1. LogLoss function:  LogLoss (w, x, y)
 //    2. Hypothesis function: H (w, x)
@@ -31,11 +31,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #define F2M_LOSS_LOSS_H_
 
 namespace f2m {
-    
+
 class Loss {
+ public:
+  virtual ~Loss() {};
+
+ // For classification problems, we usually use the LogLoss and a
+ // L1 or L2 regularizer as the objective function. The objective function
+ // is to minmize the sum of these two terms.
+ //
+ // Here, the LogLoss() only return a result of one training data record.
+ //
+ // To calcualte the loss on the whole trainning data set, we can use this 
+ // function in this way:
+ // 
+ /*
+  *
+  *
+  */
+ //
+ virtual float LogLoss(const Model* w, const Item* x, const int y) = 0;
+
+ //
+ virtual float Hypothesis() = 0;
+
+ virtual float CalGrad() = 0;
 
 };
-
 
 } // namespace f2m
 
