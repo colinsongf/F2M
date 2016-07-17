@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include "src/common/common.h"
 #include "src/common/file_utils.h"
-#include "src/common/stl-util.h"
 
 namespace f2m {
 
