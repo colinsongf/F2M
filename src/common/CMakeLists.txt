@@ -1,6 +1,12 @@
 # Build library common.
 add_library(common logging.cc)
 
+# Build unittests
+set(LIBS common gtest)
+
+add_executable(carray_test carray_test.cc)
+target_link_libraries(carray_test gtest_main ${LIBS})
+
 # Install library and header files
 install(TARGETS common DESTINATION lib/common)
 FILE(GLOB HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*.h")

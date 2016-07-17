@@ -37,8 +37,8 @@ class DestructDetector {
 };
 
 TEST(CArrayTest, NumericalValueElements) {
-  CArray<double> ad(3, 0.1)l
-  EXPECT(ad.size(), 3);
+  CArray<double> ad(3, 0.1);
+  EXPECT_EQ(ad.size(), 3);
   for (int i = 0; i < ad.size(); ++i) {
     EXPECT_EQ(ad.data()[i], 0.1);    
   }

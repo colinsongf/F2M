@@ -125,7 +125,7 @@ class CArray {
   int      size_;
 
  private:
-  DISALLOW_COPY_ANY_ASSIGN(CArray);
+  DISALLOW_COPY_AND_ASSIGN(CArray);
 };
 
 template <typename Element>
@@ -185,7 +185,7 @@ class CArray<Element*> {
   int       size_;
 
  private:
-  DISALLOW_COPY_ANY_ASSIGN(CArray);
+  DISALLOW_COPY_AND_ASSIGN(CArray);
 };
 
 #endif
