@@ -23,19 +23,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // FM loss (fm_loss.h), and FFM loss (ffm_loss.h).
 //
 // There are 2 important functions in a loss class:
-// 
-//  typedef vector<string> StringList;
-//  typedef CArray<float> FloatList;
-//  typedef vector< CArray<float> > CArrayList;
-//
-//  1. void Predict(const StringList* row_data,
-//                  const CArrayList* model_param,
-//                  FloatList* pred_results) = 0;
-//
-//  2. void CalcGrad(const StringList* row_data,
-//                   const CArrayList* model_param,
-//                   FloatList* grad) = 0;
-//
+/* 
+ *  typedef vector<string> StringList;
+ *  typedef CArray<float> FloatList;
+ *  typedef vector< CArray<float> > CArrayList;
+ *
+ *  1. void Predict(const StringList* row_data,
+ *                  const CArrayList* model_param,
+ *                  FloatList* pred_results) = 0;
+ *
+ *  2. void CalcGrad(const StringList* row_data,
+ *                   const CArrayList* model_param,
+ *                   FloatList* grad) = 0;
+ */
 // User can implement different Predict and CalcGrad functions in their
 // derived classes by using different loss functions.
 //
