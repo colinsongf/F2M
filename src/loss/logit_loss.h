@@ -16,3 +16,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 // Copyright (c) 2016 by contributors.
 // Author: Chao Ma (mctt90@gmail.com)
+//
+// Loss class for Logistic Regression.
+//
+// 
+class LogitLoss {
+
+};
