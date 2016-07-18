@@ -22,12 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // loss functions such as logistic regresiion loss (logit_loss.h),
 // FM loss (fm_loss.h), and FFM loss (ffm_loss.h).
 //
-// There are 2 important functions in a loss class:
+// There are 3 important functions in a loss class:
 /* 
- *  typedef vector<string> StringList;
- *  typedef CArray<float> FloatList;
- *  typedef vector< CArray<float> > CArrayList;
- *
  *  1. virtual void Predict(const StringList* row_data,
  *                          const CArrayList* model_param,
  *                          FloatList* pred_results) = 0;
@@ -35,13 +31,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  2. virtual void CalcGrad(const StringList* row_data,
  *                           const CArrayList* model_param,
  *                           FloatList* grad) = 0;
+ *
+ *  3. virtual float Evaluate(const FloatList* pred_results,
+ *                            const FloatList* labels);
  */ 
-// User can implement different Predict and CalcGrad functions in their
-// derived classes by using different loss functions. The Loss class 
-// can be used in both classification and regression problems.
+// User can implement different Predict, CalcGrad, and Evaluate functions 
+// in their derived classes by using different algorithms. 
+//
+// The Loss class can be used in both classification and regression problems.
 //
 #ifndef F2M_LOSS_LOSS_H_
 #define F2M_LOSS_LOSS_H_
+
+#include <vector>
+#include <string>
+#include <cmath>
+
+#include "src/common/carray.h"
+#include "src/common/common.h"
 
 namespace f2m {
 
@@ -63,6 +70,21 @@ class Loss {
   virtual void CalcGrad(const StringList* row_data,
                         const CArrayList* model_param,
                         FloatList* grad) = 0;
+
+  // Given the prediction results and the true labels,
+  // return current loss value. Here we use LogLoss in default.
+  virtual float Evaluate(const FloatList* pred_results,
+                         const FloatList* labels) const {
+    float objv = 0.0;
+    for (size_t i = 0; i < pred_results.size(); ++i) {
+      float y = label[i] > 0 ? 1 : -1;
+      objv += log(1 + exp(- y * pred_results[i]));
+    }
+    return objv;
+  }
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Loss);
 };
 
 } // namespace f2m
