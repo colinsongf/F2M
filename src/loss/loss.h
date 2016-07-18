@@ -66,7 +66,7 @@ class Loss {
                        const CArrayList* model_param,
                        FloatList* pred_results) = 0;
 
-  // Givenn the traning data records, return the gradients.
+  // Given the traning data records, return the gradients.
   virtual void CalcGrad(const StringList* row_data,
                         const CArrayList* model_param,
                         FloatList* grad) = 0;

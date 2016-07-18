@@ -19,7 +19,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //
 // Loss class for Logistic Regression.
 //
-// 
-class LogitLoss {
+#ifndef F2M_LOSS_LOGIT_LOSS_H_
+#define F2M_LOSS_LOGIT_LOSS_H_
 
+#include "src/loss/loss.h"
+
+namespace f2m {
+
+class LogitLoss : public Loss {
+ public:
+  LogitLoss() {}
+  ~Logistic() {}
+
+  void Predict(const StringList* row_data,
+               const CArrayList* model_param,
+               FloatList* pred_results);
+
+  void CalcGrad(const StringList* row_data,
+                const CArrayList* model_param,
+                FloatList* grad);
 };
+
+} // namespace f2m
+
+#endif // F2M_LOSS_LOGIT_LOSS_H_
