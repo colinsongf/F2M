@@ -60,13 +60,15 @@ class Loss {
  public:
   virtual ~Loss() {}
 
-  // Given the testing data records, return their prediction result.
+  // Given the testing data records and current model, 
+  // return their prediction result.
   // Note that the prediction result is represented as a float number.
   virtual void Predict(const StringList* row_data,
                        const CArrayList* model_param,
                        FloatList* pred_results) = 0;
 
-  // Given the traning data records, return the gradients.
+  // Given the traning data records and current model, 
+  // return the gradients.
   virtual void CalcGrad(const StringList* row_data,
                         const CArrayList* model_param,
                         FloatList* grad) = 0;
