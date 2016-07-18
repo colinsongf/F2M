@@ -28,24 +28,41 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *  typedef CArray<float> FloatList;
  *  typedef vector< CArray<float> > CArrayList;
  *
- *  1. void Predict(const StringList* row_data,
- *                  const CArrayList* model_param,
- *                  FloatList* pred_results) = 0;
+ *  1. virtual void Predict(const StringList* row_data,
+ *                          const CArrayList* model_param,
+ *                          FloatList* pred_results) = 0;
  *
- *  2. void CalcGrad(const StringList* row_data,
- *                   const CArrayList* model_param,
- *                   FloatList* grad) = 0;
- */
+ *  2. virtual void CalcGrad(const StringList* row_data,
+ *                           const CArrayList* model_param,
+ *                           FloatList* grad) = 0;
+ */ 
 // User can implement different Predict and CalcGrad functions in their
-// derived classes by using different loss functions.
+// derived classes by using different loss functions. The Loss class 
+// can be used in both classification and regression problems.
 //
 #ifndef F2M_LOSS_LOSS_H_
 #define F2M_LOSS_LOSS_H_
 
 namespace f2m {
 
-class Loss {
+typedef std::vector<std::string> StringList;     // To store the training and testing data.
+typedef CArray<float> FloatList;                 // float is sufficient enough for ML problems.
+typedef vector< CArray<float> >; CArrayList;     // To handle model of LR, FM, as well as FFM.
 
+class Loss {
+ public:
+  virtual ~Loss() {}
+
+  // Given the testing data records, return their prediction result.
+  // Note that the prediction result is represented as a float number.
+  virtual void Predict(const StringList* row_data,
+                       const CArrayList* model_param,
+                       FloatList* pred_results) = 0;
+
+  // Givenn the traning data records, return the gradients.
+  virtual void CalcGrad(const StringList* row_data,
+                        const CArrayList* model_param,
+                        FloatList* grad) = 0;
 };
 
 } // namespace f2m
