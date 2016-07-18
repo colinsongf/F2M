@@ -19,6 +19,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 //
 // Loss class for Logistic Regression.
 //
+// For Logistic Regression, we use LogLoss for classification problems.
+//
 #ifndef F2M_LOSS_LOGIT_LOSS_H_
 #define F2M_LOSS_LOGIT_LOSS_H_
 
@@ -30,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include "src/loss/loss.h"
 
-
 namespace f2m {
 
 class LogitLoss : public Loss {
@@ -38,13 +39,20 @@ class LogitLoss : public Loss {
   LogitLoss() {}
   ~Logistic() {}
 
+  // Given the testing data records, return the prediction results.
+  // Note that, for LR, the model_param has only one element, i.e.,
+  // model_param[0] is the real parameter vector.
   void Predict(const StringList* row_data,
                const CArrayList* model_param,
                FloatList* pred_results);
 
+  // Given the training data records, return the gradients.
   void CalcGrad(const StringList* row_data,
                 const CArrayList* model_param,
                 FloatList* grad);
+
+ private:
+  
 };
 
 } // namespace f2m

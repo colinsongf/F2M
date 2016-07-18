@@ -83,6 +83,10 @@ class Loss {
     return objv;
   }
 
+ protected:
+  Parser* parser_;   // We need a parser here because the input format of the data
+                     // is different in LR, FM, and FFM.
+
  private:
   DISALLOW_COPY_AND_ASSIGN(Loss);
 };
