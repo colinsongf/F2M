@@ -45,6 +45,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include <vector>
 #include <string>
+#include <map>
 #include <cmath>
 
 #include "src/common/carray.h"
@@ -54,7 +55,7 @@ namespace f2m {
 
 typedef std::vector<std::string> StringList;     // To store the training and testing data.
 typedef CArray<float> FloatList;                 // float is sufficient enough for ML problems.
-typedef vector< CArray<float> > CArrayList;      // To handle the model of LR, FM, as well as FFM.
+typedef map< CArray<float> > CArrayList;         // To handle the model of LR, FM, as well as FFM.
 
 class Loss {
  public:

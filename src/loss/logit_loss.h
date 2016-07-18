@@ -36,8 +36,8 @@ namespace f2m {
 
 class LogitLoss : public Loss {
  public:
-  LogitLoss() {}
-  ~Logistic() {}
+  LogitLoss();
+  ~Logistic();
 
   // Given the testing data records, return the prediction results.
   // Note that, for LR, the model_param has only one element, i.e.,
@@ -51,8 +51,8 @@ class LogitLoss : public Loss {
                 const CArrayList* model_param,
                 FloatList* grad);
 
- private:
-  
+ private: 
+  DISALLOW_COPY_AND_ASSIGN(LogitLoss);
 };
 
 } // namespace f2m
