@@ -98,7 +98,7 @@ class Reader {
   char* memory_buffer_;        // in-memory buffer
   uint64 size_memory_buffer_;  // the size of memory buffer
   
-  StringList* data_samples_;   // current data samples
+  StringList* data_samples_;    // current data samples
 
   StringList* SampleFromDisk();
   StringList* SampleFromMemory();

@@ -75,8 +75,6 @@ Reader::~Reader() {
   if (memory_buffer_ != NULL) {
     delete memory_buffer_;
   }
-
-  delete data_samples_;
 }
 
 StringList* Reader::Samples() {
