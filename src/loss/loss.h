@@ -33,7 +33,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <cmath>  // for log() and exp()
 
 #include "src/common/common.h"
-#include "src/common/data_ml.h"  // define the type of Model and ValueList
+#include "src/common/data_ml.h"  // define the types like real_t, Model, 
+                                 // and ValueList
 
 namespace f2m {
 
@@ -57,9 +58,9 @@ class Loss {
 
   // Given the prediction results and the true labels, return current loss value. 
   // Here we use LogLoss in default.
-  virtual float Evaluate(const ValueList* pred_results,
+  virtual real_t Evaluate(const ValueList* pred_results,
                          const ValueList* labels) const {
-    float objv = 0.0;
+    real_t objv = 0.0;
     for (size_t i = 0; i < pred_results.size(); ++i) {
       float y = label[i] > 0 ? 1 : -1;
       objv += log(1 + exp(- y * pred_results[i]));
