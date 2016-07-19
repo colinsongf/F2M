@@ -34,8 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include "src/common/common.h"
 #include "src/common/data_ml.h"  // define the type of Model and ValueList
-#include "src/common/dense_vector.h"
-#include "src/common/sparse_vector.h"
 
 namespace f2m {
 
