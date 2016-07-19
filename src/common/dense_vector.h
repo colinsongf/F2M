@@ -84,7 +84,35 @@ void AddScaledInto(DenseVector<ValueType>* w,
   CHECK_EQ(u.size(), w->size());
   CHECK_LT(0, u.size());
   // TODO: we can use openmp to speedup the performance here.
-                       
+  for (int i = 0; i < u.size(); ++i) {
+    (*w)[i] = u[i] + v[i] * c;
+  }
+}
+
+// DotProduct(u,v) : r <- dot(u, v)
+template <class ValueType>
+ValueType DotProduct(const DenseVector<ValueType>& v1,
+                     const DenseVector<ValueType>& v2) {
+  CHECK_EQ(v1.size(), v2.size());
+  ValueType ret = 0;
+  // TODO: we can use openmp to speedup the performance here.
+  for (int i = 0; i < v1.size(); ++i) {
+    ret += v1[i] * v2[i];
+  }
+  return ret;
+}
+
+// Output a sparse vector in human readable format.
+template <class ValueType>
+ostream& operator<< (ostream& output,
+                     const DenseVector<ValueType>& vec) {
+  output << "[ ";
+  for (int i = 0; i < vec.size(); ++i) {
+    if (vec[i] != 0) // to keep the format the same with sparse
+      output << i << ":" << vec[i] << " ";
+  }
+  output << "]";
+  return output;
 }
 
 } // namespace f2m
