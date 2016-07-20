@@ -50,17 +50,17 @@ class Loss {
   // regression problems.
   virtual void Predict(const StringList* row_data, 
                        const Model* model_param,
-                       ValueList* pred) = 0;
+                       DenseList* pred) = 0;
 
   // Given the traning data records and current model, return the gradients.
   virtual void CalcGrad(const StringList* row_data,
                         const Model* model_param,
-                        ValueList* grad) = 0;
+                        SparseList* grad) = 0;
 
   // Given the prediction results and the true labels, return  
   // current loss value. Here we use LogLoss in default.
-  virtual real_t Evaluate(const ValueList* pred_results,
-                         const ValueList* labels) const {
+  virtual real_t Evaluate(const DenseList* pred,
+                          const DenseList* labels) const {
     real_t objv = 0.0;
     for (size_t i = 0; i < pred_results.size(); ++i) {
       float y = label[i] > 0 ? 1 : -1;
