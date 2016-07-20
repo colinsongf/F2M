@@ -46,7 +46,8 @@ class Loss {
 
   // Given the testing data records and current model, return the prediction 
   // result. Note that the prediction result is represented as a real number 
-  // in (defined in src/common/data_ml.h) both classification and regression problems.
+  // in (defined in src/common/data_ml.h) both classification and 
+  // regression problems.
   virtual void Predict(const StringList* row_data, 
                        const Model* model_param,
                        ValueList* pred) = 0;
@@ -56,8 +57,8 @@ class Loss {
                         const Model* model_param,
                         ValueList* grad) = 0;
 
-  // Given the prediction results and the true labels, return current loss value. 
-  // Here we use LogLoss in default.
+  // Given the prediction results and the true labels, return  
+  // current loss value. Here we use LogLoss in default.
   virtual real_t Evaluate(const ValueList* pred_results,
                          const ValueList* labels) const {
     real_t objv = 0.0;
