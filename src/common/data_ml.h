@@ -36,8 +36,7 @@ typedef float real_t;
 // can normally be used to store feature index
 typedef uint32 index_t;
 
-// Define sparse value list, which is used to be store feature
-// value list and gradient list.
+// Define sparse value list.
 typedef SparseVector<index_t, real_t> SparseList;
 
 // Define dense value list.
