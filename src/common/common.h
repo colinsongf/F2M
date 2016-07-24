@@ -18,7 +18,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 // Author: Chao Ma (mctt90@gmail.com)
 //
 // This file provides the following basic facilities to make
-// programming convennient:
+// programming convennient.
 // 
 //  * A set of CHECKxx macros via gtest.
 // 
@@ -191,5 +191,7 @@ static const int64 kInt64Max = 0x7FFFFFFFFFFFFFFFll;
 static const int64 kInt64Min = -kInt64Max - 1;
 static const uint32 kUInt32Max = 0xFFFFFFFFu;
 static const uint64 KUInt64Max = 0xFFFFFFFFFFFFFFFFull;
+
+//----------------------------------
 
 #endif // F2M_COMMON_COMMON_H_
