@@ -5,14 +5,10 @@
 # which build all subdirectories (packages) in the order of
 # inter-package dependence.
 #
-# Before you build this project, please you need to set up
-# the dependent libraries following this doc:
-#
-#   https://github.com/aksnzhy/F2M/blob/master/doc/install.md
-#
-# Now, you can build the F2M using the following commands:
+# you can build the F2M using the following commands:
 #
 # $> mkdir build
+# $> cd build
 # $> cmake ..
 # $> make
 #
@@ -110,8 +106,8 @@ link_directories(
 #-------------------------------------------------------------------------------
 add_subdirectory(src/gtest)
 add_subdirectory(src/common)
-add_subdirectory(src/loss)
-add_subdirectory(src/reader)
-add_subdirectory(src/train)
-add_subdirectory(src/updater)
-add_subdirectory(src/validate)
+#add_subdirectory(src/loss)
+#add_subdirectory(src/reader)
+#add_subdirectory(src/train)
+#add_subdirectory(src/updater)
+#add_subdirectory(src/validate)

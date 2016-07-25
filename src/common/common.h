@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
  This file provides the basic facilities to make
  programming more convennient.
- */ 
+ */
 
 #ifndef F2M_COMMON_COMMON_H_
 #define F2M_COMMON_COMMON_H_
@@ -29,6 +29,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <stdlib.h>
 #ifndef _MSC_VER
 #include <stdint.h> // Linux, MacOSX and Cygwin has this standard header.
+#endif
+#include <assert.h>
 
 #include <fstream>
 #include <iomanip>
@@ -46,25 +48,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  *
  * Example:
  *
- * int main() {
- *   InitializeLogger("/tmp/info.log", "/tmp/warn.log", "/tmp/erro/log");
- *   LOG(INFO)    << "An info message going into /tmp/info.log";
- *   LOG(WARNING) << "An warn message going into /tmp/warn.log";
- *   LOG(ERROR)   << "An erro message going into /tmp/erro.log";
- *   LOG(FATAL)   << "An fatal message going into /tmp/erro.log, "
- *                << "and kills current process by a segmentation fault.";
- *   return 0;
- * }
+ *  int main() {
+ *    InitializeLogger("/tmp/info.log", "/tmp/warn.log", "/tmp/erro/log");
+ *    LOG(INFO)    << "An info message going into /tmp/info.log";
+ *    LOG(WARNING) << "An warn message going into /tmp/warn.log";
+ *    LOG(ERROR)   << "An erro message going into /tmp/erro.log";
+ *    LOG(FATAL)   << "An fatal message going into /tmp/erro.log, "
+ *                 << "and kills current process by a segmentation fault.";
+ *    return 0;
+ *  }
  * -----------------------------------------------------------------------------
  */
 
 void InitializeLogger(const std::string& info_log_filename,
                       const std::string& warn_log_filename,
-                      const std::string& erro_log_filename) {
-  Logger::info_log_file_.open(info_log_filename.c_str());
-  Logger::warn_log_file_.open(warn_log_filename.c_str());
-  Logger::erro_log_file_.open(erro_log_filename.c_str());
-}
+                      const std::string& erro_log_filename);
 
 enum LogSeverity { INFO, WARNING, ERROR, FATAL };
 
@@ -72,46 +70,20 @@ class Logger {
   friend void InitializeLogger(const std::string& info_log_filename,
                                const std::string& warn_log_filename,
                                const std::string& erro_log_filename);
-
- public:
+public:
   Logger(LogSeverity s) : severity_(s) {}
+  ~Logger();
 
-  ~Logger() {
-    GetStream(severity_) << "\n" << std::flush;
-    if (severity_ == FATAL) {
-      info_log_file_.close();
-      warn_log_file_.close();
-      erro_log_file_.close();
-      abort();
-    }
-  };
-
-  static std::ostream& GetStream(LogSeverity severity) {
-    return (severity == INFO) ?
-        (info_log_file_.is_open() ? info_log_file_ : std::cout) :
-        (severity == WARNING ? 
-        (warn_log_file_.is_open() ? warn_log_file_ : std::cerr) :
-        (erro_log_file_.is_open() ? erro_log_file_ : std::cerr));
-  }
-
+  static std::ostream& GetStream(LogSeverity severity);
   static std::ostream& Start(LogSeverity severity,
                              const std::string& file,
                              int line,
-                             const std::string& function) {
-    time_t tm;
-    time(&tm);
-    char time_string[128];
-    ctime_r(&tm, time_string);
-    return GetStream(severity) << time_string
-                             << " " << file << ":" << line
-                             << " (" << function << ") " << std::flush;
-  }
+                             const std::string& function);
 
- private:
+private:
   static std::ofstream info_log_file_;
   static std::ofstream warn_log_file_;
   static std::ofstream erro_log_file_;
-
   LogSeverity severity_;
 };
 
@@ -149,6 +121,53 @@ class Logger {
 
 #define LOG(severity)                                                     \
   Logger(severity).Start(severity, __FILE__, __LINE__, __FUNCTION__)
+
+
+std::ofstream Logger::info_log_file_;
+std::ofstream Logger::warn_log_file_;
+std::ofstream Logger::erro_log_file_;
+
+void InitializeLogger(const std::string& info_log_filename,
+                      const std::string& warn_log_filename,
+                      const std::string& erro_log_filename) {
+  Logger::info_log_file_.open(info_log_filename.c_str());
+  Logger::warn_log_file_.open(warn_log_filename.c_str());
+  Logger::erro_log_file_.open(erro_log_filename.c_str());
+}
+
+/*static*/
+std::ostream& Logger::GetStream(LogSeverity severity) {
+  return (severity == INFO) ?
+      (info_log_file_.is_open() ? info_log_file_ : std::cout) :
+      (severity == WARNING ?
+       (warn_log_file_.is_open() ? warn_log_file_ : std::cerr) :
+       (erro_log_file_.is_open() ? erro_log_file_ : std::cerr));
+}
+
+/*static*/
+std::ostream& Logger::Start(LogSeverity severity,
+                            const std::string& file,
+                            int line,
+                            const std::string& function) {
+  time_t tm;
+  time(&tm);
+  char time_string[128];
+  ctime_r(&tm, time_string);
+  return GetStream(severity) << time_string
+                             << " " << file << ":" << line
+                             << " (" << function << ") " << std::flush;
+}
+
+Logger::~Logger() {
+  GetStream(severity_) << "\n" << std::flush;
+
+  if (severity_ == FATAL) {
+    info_log_file_.close();
+    warn_log_file_.close();
+    erro_log_file_.close();
+    abort();
+  }
+}
 
 /* -----------------------------------------------------------------------------
  * In cases when the program must quit imediately (e.g., due to severe bugs), 
@@ -913,7 +932,7 @@ class scoped_array {
  *  };
  * -----------------------------------------------------------------------------
  */
- 
+
 template <typename Element>
 class CArray {
  public:
@@ -999,8 +1018,8 @@ class CArray<Element*> {
 
   int size() const { return size_; }
 
-  const Element** data() const { return data_; }
-  Element**       data()       { return data_; }
+  inline const Element** data() const { return data_; }
+  inline Element**       data()       { return data_; }
 
  protected:
   void Allocate(int size) {

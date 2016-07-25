@@ -23,7 +23,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #ifndef F2M_COMMON_DENSE_VECTOR_H_
 #define F2M_COMMON_DENSE_VECTOR_H_
 
-#include "src/common/carray.h"
 #include "src/common/common.h"
 
 namespace f2m {
