@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  Copyright (c) 2016 by contributors.
  Author: Chao Ma (mctt90@gmail.com)
 
- This file provides the basic facilities to make
+ This file provides the basic facilities to make the
  programming more convennient.
  */
 
@@ -31,6 +31,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <stdint.h> // Linux, MacOSX and Cygwin has this standard header.
 #endif
 #include <assert.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 #include <fstream>
 #include <iomanip>
@@ -38,6 +40,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <string>
 #include <map>
 #include <algorithm>
+#include <set>
+
+using std::string;
+using std::vector;
+using std::set;
 
 /* -----------------------------------------------------------------------------
  * Provde a basic logging facilities that treat log messages by their 
@@ -121,53 +128,6 @@ private:
 
 #define LOG(severity)                                                     \
   Logger(severity).Start(severity, __FILE__, __LINE__, __FUNCTION__)
-
-
-std::ofstream Logger::info_log_file_;
-std::ofstream Logger::warn_log_file_;
-std::ofstream Logger::erro_log_file_;
-
-void InitializeLogger(const std::string& info_log_filename,
-                      const std::string& warn_log_filename,
-                      const std::string& erro_log_filename) {
-  Logger::info_log_file_.open(info_log_filename.c_str());
-  Logger::warn_log_file_.open(warn_log_filename.c_str());
-  Logger::erro_log_file_.open(erro_log_filename.c_str());
-}
-
-/*static*/
-std::ostream& Logger::GetStream(LogSeverity severity) {
-  return (severity == INFO) ?
-      (info_log_file_.is_open() ? info_log_file_ : std::cout) :
-      (severity == WARNING ?
-       (warn_log_file_.is_open() ? warn_log_file_ : std::cerr) :
-       (erro_log_file_.is_open() ? erro_log_file_ : std::cerr));
-}
-
-/*static*/
-std::ostream& Logger::Start(LogSeverity severity,
-                            const std::string& file,
-                            int line,
-                            const std::string& function) {
-  time_t tm;
-  time(&tm);
-  char time_string[128];
-  ctime_r(&tm, time_string);
-  return GetStream(severity) << time_string
-                             << " " << file << ":" << line
-                             << " (" << function << ") " << std::flush;
-}
-
-Logger::~Logger() {
-  GetStream(severity_) << "\n" << std::flush;
-
-  if (severity_ == FATAL) {
-    info_log_file_.close();
-    warn_log_file_.close();
-    erro_log_file_.close();
-    abort();
-  }
-}
 
 /* -----------------------------------------------------------------------------
  * In cases when the program must quit imediately (e.g., due to severe bugs), 
@@ -375,144 +335,19 @@ void STLDeleteValuesAndClear(AssocContainer* c) {
  * -----------------------------------------------------------------------------
  */
 
-unsigned int RSHash(const std::string& str) {
-  unsigned int b    = 378551;
-  unsigned int a    = 63689;
-  unsigned int hash = 0;
+typedef unsigned int (*HashFunction)(const std::string&);
 
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = hash * a + str[i];
-    a = a * b;
-  }
-  return hash;
-}
-/* End Of RS Hash Function */
-
-unsigned int JSHash(const std::string& str) {
-  unsigned int hash = 1315423911;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash ^= ((hash << 5) + str[i] + (hash >> 2));
-  }
-  return hash;
-}
-/* End Of JS Hash Function */
-
-unsigned int PJWHash(const std::string& str) {
-  unsigned int BitsInUnsignedInt = (unsigned int)(sizeof(unsigned int) * 8);
-  unsigned int ThreeQuarters = (unsigned int)((BitsInUnsignedInt  * 3) / 4);
-  unsigned int OneEighth     = (unsigned int)(BitsInUnsignedInt / 8);
-  unsigned int HighBits =
-      (unsigned int)(0xFFFFFFFF) << (BitsInUnsignedInt - OneEighth);
-  unsigned int hash              = 0;
-  unsigned int test              = 0;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = (hash << OneEighth) + str[i];
-
-    if ((test = hash & HighBits) != 0) {
-      hash = ((hash ^ (test >> ThreeQuarters)) & (~HighBits));
-    }
-  }
-
-  return hash;
-}
-/* End Of  P. J. Weinberger Hash Function */
-
-unsigned int ELFHash(const std::string& str) {
-  unsigned int hash = 0;
-  unsigned int x    = 0;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = (hash << 4) + str[i];
-    if ((x = hash & 0xF0000000L) != 0) {
-      hash ^= (x >> 24);
-    }
-    hash &= ~x;
-  }
-
-  return hash;
-}
-/* End Of ELF Hash Function */
-
-unsigned int BKDRHash(const std::string& str) {
-  unsigned int seed = 131;  // 31 131 1313 13131 131313 etc..
-  unsigned int hash = 0;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = (hash * seed) + str[i];
-  }
-
-  return hash;
-}
-/* End Of BKDR Hash Function */
-
-unsigned int SDBMHash(const std::string& str) {
-  unsigned int hash = 0;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = str[i] + (hash << 6) + (hash << 16) - hash;
-  }
-
-  return hash;
-}
-/* End Of SDBM Hash Function */
-
-unsigned int DJBHash(const std::string& str) {
-  unsigned int hash = 5381;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = ((hash << 5) + hash) + str[i];
-  }
-
-  return hash;
-}
-/* End Of DJB Hash Function */
-
-unsigned int DEKHash(const std::string& str) {
-  unsigned int hash = static_cast<unsigned int>(str.length());
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = ((hash << 5) ^ (hash >> 27)) ^ str[i];
-  }
-
-  return hash;
-}
-/* End Of DEK Hash Function */
-
-unsigned int BPHash(const std::string& str) {
-  unsigned int hash = 0;
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash = hash << 7 ^ str[i];
-  }
-
-  return hash;
-}
-/* End Of BP Hash Function */
-
-unsigned int FNVHash(const std::string& str) {
-  const unsigned int fnv_prime = 0x811C9DC5;
-  unsigned int hash = 0;
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash *= fnv_prime;
-    hash ^= str[i];
-  }
-
-  return hash;
-}
-/* End Of FNV Hash Function */
-
-unsigned int APHash(const std::string& str) {
-  unsigned int hash = 0xAAAAAAAA;
-
-  for (std::size_t i = 0; i < str.length(); i++) {
-    hash ^= ((i & 1) == 0) ? ((hash <<  7) ^ str[i] * (hash >> 3)) :
-            (~((hash << 11) + (str[i] ^ (hash >> 5))));
-  }
-
-  return hash;
-}
-/* End Of AP Hash Function */
+unsigned int RSHash(const std::string& str);
+unsigned int JSHash(const std::string& str);
+unsigned int PJWHash(const std::string& str);
+unsigned int ELFHash(const std::string& str);
+unsigned int BKDRHash(const std::string& str);
+unsigned int SDBMHash(const std::string& str);
+unsigned int DJBHash(const std::string& str);
+unsigned int DEKHash(const std::string& str);
+unsigned int BPHash(const std::string& str);
+unsigned int FNVHash(const std::string& str);
+unsigned int APHash(const std::string& str);
 
 /* -----------------------------------------------------------------------------
  * This is an implementation deisgned to match anticipated future TR2
@@ -880,5 +715,150 @@ class scoped_array {
 
 #define CLASS_REGISTER_CREATE_OBJECT(register_name, entry_name_as_string) \
   GetRegistry_##register_name().CreateObject(entry_name_as_string)
+
+/* -----------------------------------------------------------------------------
+ * String splitting utilities.
+ * -----------------------------------------------------------------------------
+
+/* Subdivide string |full| into substrings according to delimitors
+ * given in |delim|.  |delim| should pointing to a string including
+ * one or more characters.  Each character is considerred a possible
+ * delimitor.  For example:
+ *
+ *   vector<string> substrings;
+ *   SplitStringUsing("apple orange\tbanana", "\t ", &substrings);
+ *
+ * results in three substrings:
+ *
+ *   substrings.size() == 3
+ *   substrings[0] == "apple"
+ *   substrings[1] == "orange"
+ *   substrings[2] == "banana"
+ */
+void SplitStringUsing(const std::string& full,
+                      const char* delim,
+                      std::vector<std::string>* result);
+
+/* This function has the same semnatic as SplitStringUsing.  Results
+ * are saved in an STL set container.
+ */
+void SplitStringToSetUsing(const std::string& full,
+                           const char* delim,
+                           std::set<std::string>* result);
+   
+template <typename T>
+struct simple_insert_iterator {
+  explicit simple_insert_iterator(T* t) : t_(t) { }
+
+  simple_insert_iterator<T>& operator=(const typename T::value_type& value) {
+    t_->insert(value);
+    return *this;
+  }
+
+  simple_insert_iterator<T>& operator*() { return *this; }
+  simple_insert_iterator<T>& operator++() { return *this; }
+  simple_insert_iterator<T>& operator++(int placeholder) { return *this; }
+
+  T* t_;
+};
+
+template <typename T>
+struct back_insert_iterator {
+  explicit back_insert_iterator(T& t) : t_(t) {}
+
+  back_insert_iterator<T>& operator=(const typename T::value_type& value) {
+    t_.push_back(value);
+    return *this;
+  }
+
+  back_insert_iterator<T>& operator*() { return *this; }
+  back_insert_iterator<T>& operator++() { return *this; }
+  back_insert_iterator<T> operator++(int placeholder) { return *this; }
+
+  T& t_;
+};
+
+template <typename StringType, typename ITR>
+static inline
+void SplitStringToIteratorUsing(const StringType& full,
+                                const char* delim,
+                                ITR& result) {
+  // Optimize the common case where delim is a single character.
+  if (delim[0] != '\0' && delim[1] == '\0') {
+    char c = delim[0];
+    const char* p = full.data();
+    const char* end = p + full.size();
+    while (p != end) {
+      if (*p == c) {
+        ++p;
+      } else {
+        const char* start = p;
+        while (++p != end && *p != c) {
+          // Skip to the next occurence of the delimiter.
+        }
+        *result++ = StringType(start, p - start);
+      }
+    }
+    return;
+  }
+
+  std::string::size_type begin_index, end_index;
+  begin_index = full.find_first_not_of(delim);
+  while (begin_index != std::string::npos) {
+    end_index = full.find_first_of(delim, begin_index);
+    if (end_index == std::string::npos) {
+      *result++ = full.substr(begin_index);
+      return;
+    }
+    *result++ = full.substr(begin_index, (end_index - begin_index));
+    begin_index = full.find_first_not_of(delim, end_index);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+ * String join utilities.
+ * -----------------------------------------------------------------------------
+ */
+
+template <class ConstForwardIterator>
+void JoinStrings(const ConstForwardIterator& begin,
+                 const ConstForwardIterator& end,
+                 const std::string& delimiter,
+                 std::string* output) {
+  output->clear();
+  for (ConstForwardIterator iter = begin; iter != end; ++iter) {
+    if (iter != begin) {
+      output->append(delimiter);
+    }
+    output->append(*iter);
+  }
+}
+
+template <class ConstForwardIterator>
+std::string JoinStrings(const ConstForwardIterator& begin,
+                        const ConstForwardIterator& end,
+                        const std::string& delimiter) {
+  std::string output;
+  JoinStrings(begin, end, delimiter, &output);
+  return output;
+}
+
+template <class Container>
+std::string JoinStrings(const Container& container,
+                        const std::string& delimiter = " ") {
+  return JoinStrings(container.begin(), container.end(), delimiter);
+}
+
+/* -----------------------------------------------------------------------------
+ * String printf utilities.
+ * This code comes from the re2 project host on Google Code
+ * (http://code.google.com/p/re2/), in particular, the following source file
+ * http://code.google.com/p/re2/source/browse/util/stringprintf.cc
+ * -----------------------------------------------------------------------------
+ */
+
+std::string StringPrintf(const char* format, ...);
+void SStringPrintf(std::string* dst, const char* format, ...);
+void StringAppendF(std::string* dst, const char* format, ...);
 
 #endif // F2M_COMMON_COMMON_H_

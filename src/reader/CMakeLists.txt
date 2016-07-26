@@ -2,7 +2,7 @@
 add_library(reader reader.cc)
 
 # Build unit tests
-set(LIBS common reader gtest)
+set(LIBS reader gtest)
 
 add_executable(reader_test reader_test.cc)
 target_link_libraries(reader_test gtest_main ${LIBS})

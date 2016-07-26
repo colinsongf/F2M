@@ -14,5 +14,60 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
-// Copyright (c) 2016 by contributors.
-// Author: Chao Ma (mctt90@gmail.com)
+
+/* 
+Copyright (c) 2016 by contributors.
+Author: Chao Ma (mctt90@gmail.com)
+
+This files defines Parser class, which parse the Reader's output
+to a DMatrix.
+*/
+
+#ifndef F2M_READER_PARSER_H_
+#define F2M_READER_PARSER_H_
+
+#include <vector>
+#include <string>
+
+#include "src/common/common.h"
+#include "src/common/data_structure.h"
+
+namespace f2m {
+
+typedef std::vector<std::string> StringList;
+
+/* -----------------------------------------------------------------------------
+ * The Parser class parse the StringList (Reader's output) to a DMatrix.
+ *
+ * In default, the Parse class parse the StringList to LR and FFM format.
+ * -----------------------------------------------------------------------------
+ */
+class Parser {
+ public:
+  /* The matrix should be pre-initialized.
+   */
+  virtual static void Parse(const StringList* list, DMatrix* matrix) {
+  	CHECK_EQ(list.size(), matrix->size());
+  	// each string value represent a row_data.
+  	for (int i = 0; i < list.size(); ++i) {
+  	  // parse the following format of one line:
+  	  //  [0:1234 1:0.123 2:0.21 3:1 4:1 5:0.05]
+      
+  	}
+  }
+};
+
+/* -----------------------------------------------------------------------------
+ * FFMParser parse the StringList to a DMatrix of FFM format.
+ * -----------------------------------------------------------------------------
+ */
+class FFMParser : public Parser {
+ public:
+  virtual static void Parse(const StringList* list, DMatrix* matrix) {
+
+  }
+};
+
+} // namespace f2m
+
+#endif // F2M_READER_PARSER_H_

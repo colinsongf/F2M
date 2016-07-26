@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 #include "src/common/common.h" 
 
-/* The float point type will be used tos store feature values.
+/* The float point type will be used to store feature values.
  */
 typedef float real_t;
 
@@ -41,17 +41,20 @@ typedef size_t index_t;
  * DSVector (Dense-Sparse Vector) can store both the dense value and 
  * the sparse value.
  *
- * For dense value, such as the global model parameter in single
+ * For dense value, such as the global model parameter on a single
  * machine, data_ is the real value vector, position_ is empty.
  *
  * For sparse value, such as the gradients at each iteraton, or the 
  * working set parameters fetched from a parameter server, data_
- * is the value vector and position_ stores the index of each value. 
+ * is the sparse value vector and position_ stores index of each value. 
  *
- * Note that, we use this data strcuture to represent all the models,
- * include Logistic Regresson, FM, as well as FFM. For FM, to parse 
- * model, we also need to know the number of K. For FFM, we need to
- * know the number of K and field number.
+ * Note that, we use this data strcuture to represent all of the models,
+ * including Logistic Regresson, FM, as well as FFM. 
+ *
+ * For FM, to parse the model, we also need to know the number of K. 
+ * For FFM, we need to know the number of K and field number. 
+ * All of this information is stored in the Loss class, and is setted by 
+ * users' input arguments.
  * -----------------------------------------------------------------------------
  */
 
@@ -72,27 +75,28 @@ bool IsASparseVector(const Vector& vec) {
 }
 
 /* -----------------------------------------------------------------------------
- * DMatrix (data matrix) is responsble for storing the input data.
+ * DMatrix (data matrix) is responsble for storing the input data 
+ * (in one mini-batch).
  *
- * Each row of the DMatrix is a RowData structure.  
- * 
+ * Each row of the DMatrix is a RowData structure, which stores the sparse 
+ * data of each line of input data.  
  * -----------------------------------------------------------------------------
  */
 
- struct RowData {
-   /* The input feature values.
-    */
-   std::vector<real_t> feature_value_;
+struct RowData {
+  /* The input feature values.
+   */
+  std::vector<real_t> feature_value_;
 
-   /* The position of these features value.
-    */
-   std::vector<index_t> feature_index_;
+  /* The position of these features value.
+   */
+  std::vector<index_t> feature_index_;
 
-   /* The field number. (optional, only for FFM)
-    */
-   std::vector<int> filed_num_;
- };
+  /* The field number. (optional, only for FFM)
+   */
+  std::vector<int> filed_num_;
+};
 
- typedef std::vector<RowData> DMatrix;
+typedef std::vector<RowData> DMatrix;
 
 #endif // F2M_COMMON_DATA_STRUCTURE_H_

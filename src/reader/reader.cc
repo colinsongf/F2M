@@ -14,20 +14,26 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
-// Copyright (c) 2016 by contributors.
-// Author: Chao Ma (mctt90@gmail.com)
-//
+
+/* 
+Copyright (c) 2016 by contributors.
+Author: Chao Ma (mctt90@gmail.com)
+
+This file is the implementation of reader.h
+*/
+
 #include "src/reader/reader.h"
 
 #include <string.h>
 
 #include "src/common/common.h"
-#include "src/common/file_utils.h"
 
 namespace f2m {
 
-const int kDefaultMaxSizeLine = 100 * 1024; // 100 KB
+const int kDefaultMaxSizeLine = 100 * 1024; // 100 KB one line
 
+/* Constructor
+ */
 Reader::Reader(const std::string& filename,
                int num_samples,
                bool in_memory)
@@ -85,6 +91,8 @@ StringList* Reader::Samples() {
                       SampleFromDisk();
 }
 
+/* Sample data from disk files.
+ */
 StringList* Reader::SampleFromDisk() {
   static char* line = new char[kDefaultMaxSizeLine];
   // read num_samples_ lines of data from disk file.
@@ -101,7 +109,8 @@ StringList* Reader::SampleFromDisk() {
       LOG(FATAL) << "Encountered a too-long line..";
     } else {
       line[read_size - 1] = '\0';
-      if (read_size > 1 && line[read_size - 2] == '\r') { // Handle DOS text format.
+      // Handle some windows text format.
+      if (read_size > 1 && line[read_size - 2] == '\r') { 
         line[read_size - 2] = '\0';
       }
     }
@@ -110,6 +119,9 @@ StringList* Reader::SampleFromDisk() {
   return data_samples_;
 }
 
+/* Read one line from a memory buffer.
+ * Used by Reader::SampleFromMemory()
+ */
 int ReadLineFromMemory(char* line, char* buf, uint64 buf_len) {
   static uint64 start_position = 0;
   static uint64 end_position = 0;
@@ -129,6 +141,8 @@ int ReadLineFromMemory(char* line, char* buf, uint64 buf_len) {
   return read_size;
 }
 
+/* Sample data from a memory buffer.
+ */
 StringList* Reader::SampleFromMemory() {
   static char* line = new char[kDefaultMaxSizeLine];
   // read num_samples_ lines of data from memory
@@ -136,7 +150,8 @@ StringList* Reader::SampleFromMemory() {
     int read_size = ReadLineFromMemory(line, memory_buffer_, 
                                        size_memory_buffer_);
     line[read_size - 1] = '\0';
-    if (read_size > 1 && line[read_size - 2] == '\r') { // Handle DOS text format.
+    // Handle some windows text format.
+    if (read_size > 1 && line[read_size - 2] == '\r') { 
       line[read_size - 2] = '\0';
     }
     (*data_samples_)[i].assign(line);
