@@ -107,7 +107,7 @@ link_directories(
 add_subdirectory(src/gtest)
 add_subdirectory(src/common)
 #add_subdirectory(src/loss)
-#add_subdirectory(src/reader)
+add_subdirectory(src/reader)
 #add_subdirectory(src/train)
 #add_subdirectory(src/updater)
 #add_subdirectory(src/validate)

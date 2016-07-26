@@ -41,6 +41,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <map>
 #include <algorithm>
 #include <set>
+#include <vector>
 
 using std::string;
 using std::vector;
@@ -453,8 +454,7 @@ class scoped_ptr {
   template <class C2> bool operator==(scoped_ptr<C2> const& p2) const;
   template <class C2> bool operator!=(scoped_ptr<C2> const& p2) const;
 
-  /*
-   * Disallow evil construtors
+  /* Disallow evil construtors
    */
   scoped_ptr(const scoped_ptr&);
   void operator=(const scoped_ptr&);
@@ -719,9 +719,10 @@ class scoped_array {
 /* -----------------------------------------------------------------------------
  * String splitting utilities.
  * -----------------------------------------------------------------------------
+ */
 
 /* Subdivide string |full| into substrings according to delimitors
- * given in |delim|.  |delim| should pointing to a string including
+ * given in |delim|. |delim| should pointing to a string including
  * one or more characters.  Each character is considerred a possible
  * delimitor.  For example:
  *
