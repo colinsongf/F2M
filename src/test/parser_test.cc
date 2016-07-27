@@ -20,12 +20,13 @@ Copyright (c) 2016 by contributors.
 Author: Chao Ma (mctt90@gmail.com)
 
 Unit Test for Reader (reader.h and reader.cc)
-We write some data to a file, then check the sample result.
+We write some data to a file, then check the parser's result.
 */
 
 #include "gtest/gtest.h"
 
 #include "src/reader/reader.h"
+#include "src/reader/parser.h"
 
 #include <string>
 #include <fstream>
@@ -39,32 +40,3 @@ const int num_data = 6;
 
 const std::string testdata[num_data] = { "apple", "banana", "cat",
                                          "orange", "Pig", "Cake" };
-
-class ReaderTest : public ::testing::Test {
- protected:
-  virtual void SetUp() { // Write some data to a temp file.
-    std::ofstream file;
-    file.open(filename.c_str());
-    for (int i = 0; i < num_data; ++i) {
-      file << testdata[i] << "\n";
-    }
-  }
-};
-
-TEST_F(ReaderTest, SampleFromDisk) {
-  StringList *samples = NULL;
-  Reader reader(filename, 1); // sample one record at each time.
-  for (int i = 0; i < num_data; ++i) {
-    samples = reader.Samples();
-    EXPECT_EQ((*samples)[0], testdata[i]);
-  }
-}
-
-TEST_F(ReaderTest, SampleFromMemory) {
-  StringList *samples = NULL;
-  Reader reader(filename, 1, true);
-  for (int i = 0; i < num_data; ++i) {
-    samples = reader.Samples();
-    EXPECT_EQ((*samples)[0], testdata[i]);
-  }
-}
