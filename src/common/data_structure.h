@@ -70,7 +70,7 @@ struct DSVector {
 
 /* To check a vector is sparse or dense.
  */
-bool IsASparseVector(const Vector& vec) {
+bool IsASparseVector(const DSVector& vec) {
   return (!vec.position_.empty());
 }
 
@@ -95,7 +95,7 @@ struct RowData {
 
   /* The field number. (optional, only for FFM)
    */
-  std::vector<int> filed_;
+  std::vector<int> field_;
 };
 
 typedef std::vector<RowData> DMatrix;

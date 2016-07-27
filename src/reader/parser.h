@@ -39,7 +39,7 @@ typedef std::vector<std::string> StringList;
 /* -----------------------------------------------------------------------------
  * The Parser class parse the StringList (Reader's output) to a DMatrix.
  *
- * In default, the Parse class parse the StringList to LR and FFM format.
+ * In default, the Parse class parse the StringList to LR and FM format.
  * -----------------------------------------------------------------------------
  */
 class Parser {
@@ -47,9 +47,9 @@ class Parser {
   /* The matrix should be pre-initialized with the
    * the same size of the StringList.
    */
-  virtual static void Parse(const StringList* list, DMatrix* matrix) {
-    CHECK_EQ(list.size(), matrix->size());
-    for (int i = 0; i < list.size(); ++i) {
+  virtual void Parse(const StringList* list, DMatrix* matrix) {
+    CHECK_EQ(list->size(), matrix->size());
+    for (int i = 0; i < list->size(); ++i) {
       // parse the following format of one line:
       // [0:1234 1:0.123 2:0.21 3:1 4:1 5:0.05 0]
       StringList items;
@@ -73,7 +73,7 @@ class Parser {
         }
         // get index and value
         ch_ptr[pos] = '\0';
-        int index = atoi(ch_ptr)
+        int index = atoi(ch_ptr);
         float value = atof(ch_ptr + pos + 1);
         // add index and value to RowData.
         (*matrix)[i].feature_value_.push_back(value);
@@ -92,9 +92,9 @@ class FFMParser : public Parser {
   /* The matrix should be pre-initialized with the
    * the same size of the StringList.
    */
-  virtual static void Parse(const StringList* list, DMatrix* matrix) {
-    CHECK_EQ(list.size(), matrix->size());
-    for (int i = 0; i < list.size(); ++i) {
+  virtual void Parse(const StringList* list, DMatrix* matrix) {
+    CHECK_EQ(list->size(), matrix->size());
+    for (int i = 0; i < list->size(); ++i) {
       // parse the following format of one line:
       // [1:1:1 2:2:1 3:3:1 3:4:1 4:5:0.999 1]
       StringList items;
