@@ -55,7 +55,7 @@ class Parser {
       StringList items;
       SplitStringUsing((*list)[i], "\t", &items);
       // parse every single items. 
-      int item_size = items[i].size();
+      int item_size = items.size();
       for (int n = 0; n < item_size; ++n) {
         char* ch_ptr = const_cast<char*>(items[n].c_str());
         // the last element is y.
@@ -100,7 +100,7 @@ class FFMParser : public Parser {
       StringList items;
       SplitStringUsing((*list)[i], "\t", &items);
       // parse every single items.
-      int item_size = items[i].size();
+      int item_size = items.size();
       for (int n = 0; n < items.size(); ++n) {
         char* ch_ptr = const_cast<char*>(items[n].c_str());
         // the last element is y.
@@ -116,7 +116,8 @@ class FFMParser : public Parser {
           LOG(FATAL) << "Input data format error: "
                      << items[n];
         }
-        int pos_1 = pos++;
+        int pos_1 = pos;
+        ++pos;
         // find the second ':' position.
         while (ch_ptr[pos] != ':' && pos < item_size - 1) { ++pos; }
         if (pos >= item_size - 1) {

@@ -42,7 +42,7 @@ const std::string filename_1 = "/tmp/reader-test-1.txt";
 const std::string filename_2 = "/tmp/reader-test-2.txt";
 
 const int num_data = 6;
-const int num_line = 10;
+const int num_line = 8;
 const int num_iteration = 1;
 
 const std::string testdata[num_data] = { "12.34", "0.123", "23.43",
@@ -94,9 +94,20 @@ TEST_F(ParserTest, LR_and_FM) {
     for (int n = 0; n < num_line; ++n) {
       EXPECT_EQ((*samples)[n], 
       	std::string("0:12.34\t1:0.123\t2:23.43\t3:34.123\t4:0.123\t5:1.01\t0.0"));
-
     }
     parser.Parse(samples, &matrix);
+    for (int n = 0; n < num_line; ++n) {
+      EXPECT_EQ(matrix[n].feature_index_.size(), 6);
+      EXPECT_EQ(matrix[n].feature_value_.size(), 7);
+      EXPECT_EQ(matrix[n].feature_value_[num_data], 0.0);
+      for (int k = 0; k < num_data; ++k) {
+      	EXPECT_EQ(matrix[n].feature_index_[k], k);
+      }
+      for (int k = 0; k < num_data; ++k) {
+      	float value = atof(testdata[k].c_str());
+      	EXPECT_EQ(matrix[n].feature_value_[k], value);
+      }
+    }
   }
 }
 
@@ -113,5 +124,21 @@ TEST_F(ParserTest, FFM) {
       	std::string("1:0:12.34\t1:1:0.123\t1:2:23.43\t1:3:34.123\t1:4:0.123\t1:5:1.01\t1.0"));
     }
     parser.Parse(samples, &matrix);
+    for (int n = 0; n < num_line; ++n) {
+      EXPECT_EQ(matrix[n].feature_index_.size(), 6);
+      EXPECT_EQ(matrix[n].field_.size(), 6);
+      EXPECT_EQ(matrix[n].feature_value_.size(), 7);
+      EXPECT_EQ(matrix[n].feature_value_[num_data], 1.0);
+      for (int k = 0; k < num_data; ++k) {
+      	EXPECT_EQ(matrix[n].feature_index_[k], k);
+      }
+      for (int k = 0; k < num_data; ++k) {
+      	float value = atof(testdata[k].c_str());
+      	EXPECT_EQ(matrix[n].feature_value_[k], value);
+      }
+      for (int k = 0; k < num_data; ++k) {
+      	EXPECT_EQ(matrix[n].field_[k], 1.0);
+      }
+    }
   }
 }
