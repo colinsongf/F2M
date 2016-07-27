@@ -84,7 +84,8 @@ bool IsASparseVector(const Vector& vec) {
  */
 
 struct RowData {
-  /* The input feature values.
+  /* The input feature values. 
+   * The last element is y (0 or 1).
    */
   std::vector<real_t> feature_value_;
 
