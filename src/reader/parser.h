@@ -69,7 +69,7 @@ class Parser {
         while (ch_ptr[pos] != ':' && pos < item_size - 1) { ++pos; }
         if (pos >= item_size - 1) {
           LOG(FATAL) << "Input data format error: "
-                     << items[i];
+                     << items[n];
         }
         // get index and value
         ch_ptr[pos] = '\0';
@@ -114,14 +114,14 @@ class FFMParser : public Parser {
         while (ch_ptr[pos] != ':' && pos < item_size - 1) { ++pos; }
         if (pos >= item_size - 1) {
           LOG(FATAL) << "Input data format error: "
-                     << items[i];
+                     << items[n];
         }
         int pos_1 = pos++;
         // find the second ':' position.
         while (ch_ptr[pos] != ':' && pos < item_size - 1) { ++pos; }
         if (pos >= item_size - 1) {
           LOG(FATAL) << "Input data format error: "
-                     << items[i];
+                     << items[n];
         }
         int pos_2 = pos;
         ch_ptr[pos_1] = '\0';
