@@ -94,7 +94,7 @@ struct RowData {
 
   /* The field number. (optional, only for FFM)
    */
-  std::vector<int> filed_num_;
+  std::vector<int> filed_;
 };
 
 typedef std::vector<RowData> DMatrix;
