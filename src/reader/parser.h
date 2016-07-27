@@ -44,21 +44,29 @@ typedef std::vector<std::string> StringList;
  */
 class Parser {
  public:
-  /* The matrix should be pre-initialized.
+  /* The matrix should be pre-initialized with the
+   * the same size of the StringList.
    */
   virtual static void Parse(const StringList* list, DMatrix* matrix) {
   	CHECK_EQ(list.size(), matrix->size());
-  	/* We use static variable here to avoid 
-  	 * construct and de-construct overhead.*/
-  	static StringList items, single_item;
   	for (int i = 0; i < list.size(); ++i) {
   	  // parse the following format of one line:
   	  // [0:1234 1:0.123 2:0.21 3:1 4:1 5:0.05]
+  	  StringList items;
       SplitStringUsing((*list)[i], "\t", &items);
       // parse every single items. 
       for (int n = 0; n < items.size(); ++n) {
-      	SplitStringUsing(items[n], ":", single_item);
-
+        char* ch_ptr = const_cast<char*>(items[n].c_str());
+        // find the ':' position.
+        int pos = 0;
+        while (ch_ptr[pos] != ':') { ++pos; }
+        // get index and value
+        ch_ptr[pos] = '\0';
+        int index = atoi(ch_ptr)
+        float value = atof(ch_ptr + pos + 1);
+        // add index and value to RowData.
+        (*matrix)[i].feature_value_.push_back(value);
+        (*matrix)[i].feature_index_.push_back(index);
       }
   	}
   }
