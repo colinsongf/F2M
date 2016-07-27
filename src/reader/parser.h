@@ -116,8 +116,7 @@ class FFMParser : public Parser {
           LOG(FATAL) << "Input data format error: "
                      << items[n];
         }
-        int pos_1 = pos;
-        ++pos;
+        int pos_1 = pos++;
         // find the second ':' position.
         while (ch_ptr[pos] != ':' && pos < item_size - 1) { ++pos; }
         if (pos >= item_size - 1) {
