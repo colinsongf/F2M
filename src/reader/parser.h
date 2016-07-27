@@ -52,7 +52,7 @@ class Parser {
     for (int i = 0; i < list.size(); ++i) {
       // parse the following format of one line:
       // [0:1234 1:0.123 2:0.21 3:1 4:1 5:0.05 0]
-  	  StringList items;
+      StringList items;
       SplitStringUsing((*list)[i], "\t", &items);
       // parse every single items. 
       int item_size = items[i].size();
@@ -79,7 +79,7 @@ class Parser {
         (*matrix)[i].feature_value_.push_back(value);
         (*matrix)[i].feature_index_.push_back(index);
       }
-  	}
+    }
   }
 };
 
