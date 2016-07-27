@@ -48,7 +48,7 @@ class Parser {
    * the same size of the StringList.
    */
   virtual static void Parse(const StringList* list, DMatrix* matrix) {
-  	CHECK_EQ(list.size(), matrix->size());
+    CHECK_EQ(list.size(), matrix->size());
     for (int i = 0; i < list.size(); ++i) {
       // parse the following format of one line:
       // [0:1234 1:0.123 2:0.21 3:1 4:1 5:0.05 0]
