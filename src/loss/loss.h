@@ -46,25 +46,31 @@ class Loss {
  public:
   virtual ~Loss() {}
 
-  /* Given the input data matrix and current model, return the prediction 
+  /* ---------------------------------------------------------------------------
+   * Given the input data matrix and current model, return the prediction 
    * results. Note that the prediction result is represented as a real 
    * number (float point type) in both classification and 
    * regression problems.
+   * ---------------------------------------------------------------------------
    */
   virtual void Predict(const DMatrix& data_matrix, 
                        const DSVector& model_param,
                        DSVector* pred) = 0;
 
-  /* Given the input data matrix and current model, return 
+  /* ---------------------------------------------------------------------------
+   * Given the input data matrix and current model, return 
    * the calculated gradients. 
+   * ---------------------------------------------------------------------------
    */
-  virtual void CalcGrad(const DMatrix* row_data,
-                        const DSVector* model_param,
+  virtual void CalcGrad(const DMatrix& data_matrix,
+                        const DSVector& model_param,
                         DSVector* grad) = 0;
 
-  /* Given the prediction results and the true labels, return  
+  /* ---------------------------------------------------------------------------
+   * Given the prediction results and the true labels, return  
    * current loss value. Here we use LogLoss in default.
    * Note that, in this LogLoss, the y is 1 or -1.
+   * ---------------------------------------------------------------------------
    */
   virtual real_t Evaluate(const DSVector* pred,
                           const DSVector* labels) const {

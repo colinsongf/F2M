@@ -15,7 +15,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.
 */
 
-/* 
+/*
 Copyright (c) 2016 by contributors.
 Author: Chao Ma (mctt90@gmail.com)
+
+Unit Test for linear_algebra.h (reader.h and reader.cc)
 */
+
+#include "gtest/gtest.h"
+
+#include "src/common/common.h"
+#include "src/common/data_structure.h"
+#include "src/common/linear_algebra.h"
+
+TEST(LinearAlgebraTest, SMDVTimes) {
+  // Initialize a sparse matrix
+
+  // Initialize a dense vector
+
+  // Times
+}

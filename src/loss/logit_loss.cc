@@ -40,6 +40,7 @@ This file implements the logit_loss.h
  * w is current model parameter represented as a vector.
  * ---------------------------------------------------------------------------
  */
+
 void LogitLoss::Predict(const DMatrix& data_matrix,
                         const DSVector& model_param,
                         DSVector* pred) {
@@ -57,8 +58,9 @@ void LogitLoss::Predict(const DMatrix& data_matrix,
  * where, 
  * ---------------------------------------------------------------------------
  */
-void LogitLoss::CalcGrad(const DMatrix* row_data,
-                         const DSVector* model_param,
+
+void LogitLoss::CalcGrad(const DMatrix& data_matrix,
+                         const DSVector& model_param,
                          DSVector* grad) {
-	
+
 }

@@ -65,14 +65,14 @@ class LogitLoss : public Loss {
    *
    *  [ pred = X * w ]
    *  [ p = -y / (1 + exp(y * pred)) ]
-   *  [ grad += X' * p ]
+   *  [ grad = X * p ]
    *
    * where, 
    * ---------------------------------------------------------------------------
    */
-  void CalcGrad(const DMatrix* row_data,
-                const DSVector* model_param,
-                DSVector* grad) = 0;
+  void CalcGrad(const DMatrix& data_matrix,
+                const DSVector& model_param,
+                DSVector* grad);
 
  private: 
   DISALLOW_COPY_AND_ASSIGN(LogitLoss);
