@@ -20,7 +20,7 @@ Copyright (c) 2016 by contributors.
 Author: Chao Ma (mctt90@gmail.com)
 
 This file defines the base class Loss, which is the 
-core of ML algorithms.
+core part of ML algorithms.
 */
 
 #ifndef F2M_LOSS_LOSS_H_
@@ -64,6 +64,7 @@ class Loss {
 
   /* Given the prediction results and the true labels, return  
    * current loss value. Here we use LogLoss in default.
+   * Note that, in this LogLoss, the y is 1 or -1.
    */
   virtual real_t Evaluate(const DSVector* pred,
                           const DSVector* labels) const {
