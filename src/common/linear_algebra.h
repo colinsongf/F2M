@@ -30,7 +30,7 @@ This file defines a set of linear algebra operations.
 
 /* -----------------------------------------------------------------------------
  * Operation: SMDVTimes(Matrix, Vector_Input, Vector_Output)
- * Sparse matrix-dense vector multiplication. Given a sparse matrix and a dense 
+ * Sparse Matrix Dense Vector multiplication. Given a sparse matrix and a dense 
  * vector, return a new dense vector. For example:
  *
  *   1 0 0 1      1       5
@@ -38,6 +38,7 @@ This file defines a set of linear algebra operations.
  *   0 3 0 3  x   3   =   18
  *   4 0 0 0      4       5
  *   0 0 0 5              20
+ *
  * -----------------------------------------------------------------------------
  */
 
@@ -47,8 +48,7 @@ This file defines a set of linear algebra operations.
 void SMDVTimes(const DMatrix& data_matrix, 
 	           const DSVector& vector_in,
 	           DSVector* vector_out) {
-  CHECK_EQ(data_matrix.size(), 
-  	       vector_out->data.size());
+  CHECK_EQ(data_matrix.size(), vector_out->data.size());
   // for every row in a data_matrix
   for (int i = 0; i < data_matrix.size(); ++i) {
   	real_t value = 0.0;
