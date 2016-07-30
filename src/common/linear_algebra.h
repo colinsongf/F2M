@@ -28,27 +28,27 @@ This file defines a set of linear algebra operations.
 #include "src/common/common.h"
 #include "src/common/data_structure.h"
 
+typedef DMatrix Matrix;
+typedef DSVector Vector;
+
 /* -----------------------------------------------------------------------------
  * Operation: SMDVTimes(Matrix, Vector_Input, Vector_Output)
- * Sparse Matrix Dense Vector multiplication. Given a sparse matrix and a dense 
- * vector, return a new dense vector. For example:
- *
+ * Sparse Matrix Dense Vector multiplication. Given a sparse matrix and a 
+ * dense vector, return a new dense vector. For example:
  *   1 0 0 1      1       5
  *   2 0 2 0      2       8
  *   0 3 0 3  x   3   =   18
  *   4 0 0 0      4       5
  *   0 0 0 5              20
- *
  * -----------------------------------------------------------------------------
  */
 
-/* Note that the vector_out shoule be pre-allocated with the 
- * same size of data_matrix.
- */
-void SMDVTimes(const DMatrix& data_matrix, 
-	           const DSVector& vector_in,
-	           DSVector* vector_out) {
-  CHECK_EQ(data_matrix.size(), vector_out->data.size());
+void SparseMatrixDenseVectorTimes(const Matrix& matrix, 
+	                              Vector& vector_in, 
+	                              Vector* vector_out) {
+  // Note that the size of vector_out should be equal to 
+  // row size of matrix. 
+  CHECK_EQ(matrix.size(), vector_out->data_.size());
   // for every row in a data_matrix
   for (int i = 0; i < data_matrix.size(); ++i) {
   	real_t value = 0.0;
@@ -56,7 +56,7 @@ void SMDVTimes(const DMatrix& data_matrix,
     for (int j = 0; j < data_matrix[i].feature_index_.size(); ++j) {
       index_t index = data_matrix[i].feature_index_[j];
       value += data_matrix[i].feature_value_[j] 
-               * vector_in.data[index];
+               * vector_in.data_[index];
     }
     vector_out->data_[i] = value;
   }
