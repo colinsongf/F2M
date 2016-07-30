@@ -28,10 +28,48 @@ Unit Test for linear_algebra.h (reader.h and reader.cc)
 #include "src/common/data_structure.h"
 #include "src/common/linear_algebra.h"
 
+typedef DMatrix Matrix;
+typedef DSVector Vector;
+
+/* -----------------------------------------------------------------------------
+ *   1 0 0 1      1       5
+ *   2 0 2 0      2       8
+ *   0 3 0 3  x   3   =   18
+ *   4 0 0 0      4       5
+ *   0 0 0 5              20
+ * -----------------------------------------------------------------------------
+ */
+
+real_t  row_value_0[2] = {1.0, 1.0};
+index_t row_index_0[2] = {0, 3};
+real_t  row_value_1[2] = {2.0, 2.0};
+index_t row_index_1[2] = {0, 2};
+real_t  row_value_2[2] = {3.0, 3.0};
+index_t row_index_2[2] = {1, 3};
+real_t  row_value_3[1] = {4.0};
+index_t row_index_3[1] = {0};
+real_t  row_value_4[1] = {5.0};
+index_t row_index_4[1] = {3};
+
+real_t model[4] = {1.0, 2.0, 3.0, 4.0};
+
 TEST(LinearAlgebraTest, SMDVTimes) {
   // Initialize a sparse matrix
-
+  Matrix matrix(5);
+  matrix[0].feature_value_.resize(2, row_value_0);
+  matrix[0].feature_index_.resize(2, row_index_0);
+  matrix[1].feature_value_.resize(2, row_value_1);
+  matrix[1].feature_index_.resize(2, row_index_1);
+  matrix[2].feature_value_.resize(2, row_value_2);
+  matrix[2].feature_index_.resize(2, row_index_2);
+  matrix[3].feature_value_.resize(2, row_value_3);
+  matrix[3].feature_index_.resize(2, row_index_3);
+  matrix[4].feature_value_.resize(2, row_value_4);
+  matrix[4].feature_index_.resize(2, row_index_4);
   // Initialize a dense vector
+  Vector vec_in;
+  vec_in.data_.resize(4, model);
+
 
   // Times
 }

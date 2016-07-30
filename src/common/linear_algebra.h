@@ -50,13 +50,12 @@ void SparseMatrixDenseVectorTimes(const Matrix& matrix,
   // row size of matrix. 
   CHECK_EQ(matrix.size(), vector_out->data_.size());
   // for every row in a data_matrix
-  for (int i = 0; i < data_matrix.size(); ++i) {
+  for (int i = 0; i < matrix.size(); ++i) {
   	real_t value = 0.0;
     // for every element in a RowData
-    for (int j = 0; j < data_matrix[i].feature_index_.size(); ++j) {
-      index_t index = data_matrix[i].feature_index_[j];
-      value += data_matrix[i].feature_value_[j] 
-               * vector_in.data_[index];
+    for (int j = 0; j < matrix[i].feature_index_.size(); ++j) {
+      index_t index = matrix[i].feature_index_[j];
+      value += matrix[i].feature_value_[j] * vector_in.data_[index];
     }
     vector_out->data_[i] = value;
   }
