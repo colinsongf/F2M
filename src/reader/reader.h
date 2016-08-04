@@ -88,7 +88,8 @@ namespace f2m {
    public:
     Reader(const std::string& filename,
            int num_samples,
-           bool in_memory = false);  /* Reader samples data from disk file on defualt.*/
+           bool in_memory = false);  /* Reader samples data from disk 
+                                        file in defualt.*/
   
     ~Reader();
  

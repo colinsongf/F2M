@@ -30,9 +30,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <stdio.h>
 
 /* -----------------------------------------------------------------------------
- * Implementation of the Logger
+ * The basic meachism of Logger is as follows:
+ *
+ *  - LOG(severity) defines a Logger instance, which records the severity.
+ *
+ *  - LOG(severity) then invokes Logger::Start(), which invokes Logger::Stream
+ *    to choose an output stream, outputs a message head into the stream and 
+ *    flush.
+ *
+ *  - The std::ostream reference is returned by LoggerStart(), passed to 
+ *    user-speific output operators (<<), which writes the log message boby.
+ *
+ *  - When the Logger instance is destructed, the destructor appends flush. 
+ *    If severity is FATAL, the destructor causes SEGFAULT and core dump.
+ *
+ * It is important to flush in Logger::Start() after outputing message 
+ * head because the time when the destructor is invoked  depends on how/where 
+ * the caller code defines the Logger instance.
+ *
+ * If the caller code crashes before the Logger instance is properly
+ * destructed, the destructor might not have the chance to append its flush 
+ * flags. 
+ *
+ * Without flush in Logger::Start(), this may cause the lose of the last 
+ * few messages. 
+ *
+ * However, given flush in Start(), program crashing between invocations to 
+ * Logger::Start() and destructor only causes the lose of the last message body, 
+ * while the message head will be there.
  * -----------------------------------------------------------------------------
  */
+
+#define LOG(severity)                                                     \
+  Logger(severity).Start(severity, __FILE__, __LINE__, __FUNCTION__)
 
 std::ofstream Logger::info_log_file_;
 std::ofstream Logger::warn_log_file_;

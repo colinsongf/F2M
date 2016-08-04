@@ -16,12 +16,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 
 /* 
- Copyright (c) 2016 by contributors.
- Author: Chao Ma (mctt90@gmail.com)
+Copyright (c) 2016 by contributors.
+Author: Chao Ma (mctt90@gmail.com)
 
- This file provides the basic facilities to make the
- programming more convennient.
- */
+This file provides the basic facilities to make the
+programming more convennient.
+*/
 
 #ifndef F2M_COMMON_COMMON_H_
 #define F2M_COMMON_COMMON_H_
@@ -39,32 +39,32 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <iostream>
 #include <string>
 #include <map>
-#include <algorithm>
 #include <set>
 #include <vector>
+#include <algorithm>
 
 using std::string;
 using std::vector;
 using std::set;
 
 /* -----------------------------------------------------------------------------
- * Provde a basic logging facilities that treat log messages by their 
- * severites. If function |InitializeLogger| was invoked and was able
- * to open files specified by the parameters, log messages of various 
- * severity will be written into corresponding files.
- * Otherwise, all log messages will be written to stderr.
- *
- * Example:
- *
- *  int main() {
- *    InitializeLogger("/tmp/info.log", "/tmp/warn.log", "/tmp/erro/log");
- *    LOG(INFO)    << "An info message going into /tmp/info.log";
- *    LOG(WARNING) << "An warn message going into /tmp/warn.log";
- *    LOG(ERROR)   << "An erro message going into /tmp/erro.log";
- *    LOG(FATAL)   << "An fatal message going into /tmp/erro.log, "
- *                 << "and kills current process by a segmentation fault.";
- *    return 0;
- *  }
+ * Provde a basic logging facilities that treat log messages by their           *
+ * severites. If function |InitializeLogger| was invoked and was able           *
+ * to open files specified by the parameters, log messages of various           *
+ * severity will be written into corresponding files.                           *
+ * Otherwise, all log messages will be written to stderr.                       *
+ *                                                                              *
+ * Example:                                                                     *
+ *                                                                              *
+ *  int main() {                                                                *
+ *    InitializeLogger("/tmp/info.log", "/tmp/warn.log", "/tmp/erro/log");      *
+ *    LOG(INFO)    << "An info message going into /tmp/info.log";               *
+ *    LOG(WARNING) << "An warn message going into /tmp/warn.log";               *
+ *    LOG(ERROR)   << "An erro message going into /tmp/erro.log";               *
+ *    LOG(FATAL)   << "An fatal message going into /tmp/erro.log, "             *
+ *                 << "and kills current process by a segmentation fault.";     *
+ *    return 0;                                                                 *
+ *  }                                                                           *
  * -----------------------------------------------------------------------------
  */
 
@@ -78,7 +78,7 @@ class Logger {
   friend void InitializeLogger(const std::string& info_log_filename,
                                const std::string& warn_log_filename,
                                const std::string& erro_log_filename);
-public:
+ public:
   Logger(LogSeverity s) : severity_(s) {}
   ~Logger();
 
@@ -88,47 +88,12 @@ public:
                              int line,
                              const std::string& function);
 
-private:
+ private:
   static std::ofstream info_log_file_;
   static std::ofstream warn_log_file_;
   static std::ofstream erro_log_file_;
   LogSeverity severity_;
 };
-
-/* -----------------------------------------------------------------------------
- * The basic meachism of logging.{h cc} is as follows:
- *
- *  - LOG(severity) defines a Logger instance, which records the severity.
- *
- *  - LOG(severity) then invokes Logger::Start(), which invokes Logger::Stream
- *    to choose an output stream, outputs a message head into the stream and 
- *    flush.
- *
- *  - The std::ostream reference is returned by LoggerStart(), passed to 
- *    user-speific output operators (<<), which writes the log message boby.
- *
- *  - When the Logger instance is destructed, the destructor appends flush. 
- *    If severity is FATAL, the destructor causes SEGFAULT and core dump.
- *
- * It is important to flush in Logger::Start() after outputing message 
- * head because the time when the destructor is invoked  depends on how/where 
- * the caller code defines the Logger instance.
- *
- * If the caller code crashes before the Logger instance is properly
- * destructed, the destructor might not have the chance to append its flush 
- * flags. 
- *
- * Without flush in Logger::Start(), this may cause the lose of the last 
- * few messages. 
- *
- * However, given flush in Start(), program crashing between invocations to 
- * Logger::Start() and destructor only causes the lose of the last message body, 
- * while the message head will be there.
- * -----------------------------------------------------------------------------
- */
-
-#define LOG(severity)                                                     \
-  Logger(severity).Start(severity, __FILE__, __LINE__, __FUNCTION__)
 
 /* -----------------------------------------------------------------------------
  * In cases when the program must quit imediately (e.g., due to severe bugs), 
@@ -236,10 +201,10 @@ private:
  * the following example.
  *
  * class Foo {
- *   public:
- *    Foo();
- *   private:
- *    DISALLOW_COPY_AND_ASSIGN(Foo);
+ *  public:
+ *   Foo();
+ *  private:
+ *   DISALLOW_COPY_AND_ASSIGN(Foo);
  * };
  * -----------------------------------------------------------------------------
  */
@@ -286,7 +251,16 @@ static const uint32 kUInt32Max = 0xFFFFFFFFu;
 static const uint64 KUInt64Max = 0xFFFFFFFFFFFFFFFFull;
 
 /* -----------------------------------------------------------------------------
- * Open file or die
+ * Open file or die. Usage:
+ *
+ *  std::string filename = "training_data.txt";
+ *  FILE* file = NULL;
+ *
+ *  // Read only
+ *  file = OpenFileOrDie(filename.c_str(), "r");
+ *
+ *  // Write only
+ *  file = OpenFileOrDie(filename.c_str(), "w");
  * -----------------------------------------------------------------------------
  */
 
@@ -300,12 +274,15 @@ static const uint64 KUInt64Max = 0xFFFFFFFFFFFFFFFFull;
 
 /* -----------------------------------------------------------------------------
  * The facilities that enhance the STL.
+ * 
+ * 1. Delete elements (in pointer type) in a STL container like 
+ *    vector, list, and deque.
+ *
+ * 2. Delete elements (in pointer type) in a STL associative container
+ *    like map and hash_map.
  * -----------------------------------------------------------------------------
  */
- 
-/* Delete elements (in pointer type) in a STL container like 
- * vector, list, and deque.
- */ 
+
 template <class Container>
 void STLDeleteElementsAndClear(Container* c) {
   for (typename Container::iterator iter = c->begin();
@@ -317,9 +294,6 @@ void STLDeleteElementsAndClear(Container* c) {
   c->clear();
 }
 
-/* Delete elements (in pointer type) in a STL associative container
- * like map and hash_map.
- */
 template <class AssocContainer>
 void STLDeleteValuesAndClear(AssocContainer* c) {
   for (typename AssocContainer::iterator iter = c->begin();
@@ -332,7 +306,22 @@ void STLDeleteValuesAndClear(AssocContainer* c) {
 }
 
 /* -----------------------------------------------------------------------------
- * Hash functions
+ * The following source code is mainly copied from http://www.partow.net, with
+ * the following Copyright information.
+ *
+ *                                                                        
+ *          General Purpose Hash Function Algorithms Library              
+ *                                                                        
+ * Author: Arash Partow - 2002                                            
+ * URL: http://www.partow.net                                             
+ * URL: http://www.partow.net/programming/hashfunctions/index.html        
+ *                                                                        
+ * Copyright notice:                                                      
+ * Free use of the General Purpose Hash Function Algorithms Library is    
+ * permitted under the guidelines and in accordance with the most current 
+ * version of the Common Public License.                                  
+ * http://www.opensource.org/licenses/cpl1.0.php                          
+ *                                                                        
  * -----------------------------------------------------------------------------
  */
 

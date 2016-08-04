@@ -53,7 +53,7 @@ index_t row_index_4[1] = {3};
 
 real_t model[4] = {1.0, 2.0, 3.0, 4.0};
 
-TEST(LinearAlgebraTest, SMDVTimes) {
+TEST(LinearAlgebraTest, SparseMatrixDenseVectorTimes) {
   // Initialize a sparse matrix
   Matrix matrix(5);
   matrix[0].feature_value_.resize(2, row_value_0);
