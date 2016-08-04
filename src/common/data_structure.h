@@ -16,11 +16,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 
 /* 
- Copyright (c) 2016 by contributors.
- Author: Chao Ma (mctt90@gmail.com)
+Copyright (c) 2016 by contributors.
+Author: Chao Ma (mctt90@gmail.com)
 
- This file defines the data structures used by f2m.
- */
+This file defines the data structures used by f2m.
+*/
 
 #ifndef F2M_COMMON_DATA_STRUCTURE_H_
 #define F2M_COMMON_DATA_STRUCTURE_H_
