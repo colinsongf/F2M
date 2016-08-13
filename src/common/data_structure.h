@@ -42,63 +42,63 @@ typedef float real_t;
 typedef uint32 index_t;
 
 /* -----------------------------------------------------------------------------
- * DSVector (Dense-Sparse Vector) can store both the dense value and 
- * the sparse value.
- *
- * For dense value, such as the global model parameter on a single
- * machine, data_ is the real value vector, position_ is empty.
- *
- * For sparse value, such as the gradients at each iteraton, or the 
- * working set parameters fetched from a parameter server, data_
- * is the sparse value vector and position_ stores index of each value. 
- *
- * Note that, we use this data strcuture to represent all of the models,
- * including Logistic Regresson, FM, as well as FFM. 
- *
- * For FM, to parse the model, we also need to know the number of K. 
- * For FFM, we need to know the number of K and field number. 
- * All of this information is stored in the Loss class, and is setted by 
- * users' input arguments.
+ * DSVector (Dense-Sparse Vector) can store both the dense value and            *
+ * the sparse value.                                                            *
+ *                                                                              *
+ * For dense value, such as the global model parameter on a single              *
+ * machine, data_ is the real value vector, position_ is empty.                 *
+ *                                                                              *
+ * For sparse value, such as the input trainning data, data_                    *         
+ * is the sparse value vector and position_ stores the index of each value.     *                                                                             
+ *                                                                              *
+ * Note that, we use this data strcuture to represent all of the models,        *
+ * including Logistic Regresson, FM, as well as FFM.  In other words, we        *
+ * represent these models in a flat way.                                        *
+ *                                                                              *
+ * For FM, to parse the model, we also need to know the number of K.            *
+ * For FFM, in addition to the K, we also need to know the field number.        *
+ * All of this information is stored in the Loss class, and is setted by        *
+ * users' input arguments.                                                      *
  * -----------------------------------------------------------------------------
  */
 
 struct DSVector {
-  /* The real value vector
-   */
+  /* The real value vector */
+
   std::vector<real_t> data_;
 
-  /* The value postion (optional)
-   */
+  /* The value postion (optional) */
+
   std::vector<index_t> position_;
 };
 
-/* To check a vector is sparse or dense.
- */
+/* To check a vector is sparse or dense. */
+
 bool IsASparseVector(const DSVector& vec) {
   return (!vec.position_.empty());
 }
 
 /* -----------------------------------------------------------------------------
- * DMatrix (data matrix) is responsble for storing the input data 
- * (in one mini-batch).
- *
- * Each row of the DMatrix is a RowData structure, which stores the sparse 
- * data of each line of input data.  
+ * DMatrix (data matrix) is responsble for storing the input data set.          *      
+ * (in one mini-batch).                                                         *
+ *                                                                              *
+ * Each row of the DMatrix is a RowData structure, which stores the sparse      *
+ * data of each input line.                                                     *
  * -----------------------------------------------------------------------------
  */
 
 struct RowData {
   /* The input feature values. 
-   * The last element is y (0 or 1).
-   */
+     The last element is y (-1 or 1). */
+
   std::vector<real_t> feature_value_;
 
-  /* The position of these features value.
-   */
+  /* The positions of these features value. */
+
   std::vector<index_t> feature_index_;
 
-  /* The field number. (optional, only for FFM)
-   */
+  /* The field number. (optional, only for FFM) */
+
   std::vector<int> field_;
 };
 
