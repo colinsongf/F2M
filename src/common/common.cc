@@ -16,11 +16,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 */
 
 /* 
- Copyright (c) 2016 by contributors.
- Author: Chao Ma (mctt90@gmail.com)
+Copyright (c) 2016 by contributors.
+Author: Chao Ma (mctt90@gmail.com)
 
- This file is the implementation of common.h.
- */
+This file is the implementation of common.h.
+*/
 
 #include "src/common/common.h"
 
@@ -30,17 +30,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #include <stdio.h>
 
 /* -----------------------------------------------------------------------------
- * The basic meachism of Logger is as follows:
- *
- *  - LOG(severity) defines a Logger instance, which records the severity.
- *
- *  - LOG(severity) then invokes Logger::Start(), which invokes Logger::Stream
- *    to choose an output stream, outputs a message head into the stream and 
- *    flush.
- *
- *  - The std::ostream reference is returned by LoggerStart(), passed to 
- *    user-speific output operators (<<), which writes the log message boby.
- *
+ * The basic meachism of Logger is as follows:                                  *
+ *                                                                              *
+ *  - LOG(severity) defines a Logger instance, which records the severity.      *
+ *                                                                              *
+ *  - LOG(severity) then invokes Logger::Start(), which invokes Logger::Stream  *
+ *    to choose an output stream, outputs a message head into the stream and    *
+ *    flush.                                                                    *
+ *                                                                              *
+ *  - The std::ostream reference is returned by LoggerStart(), passed to        *
+ *    user-speific output operators (<<), which writes the log message boby.    *
+ *                                                                              *
  *  - When the Logger instance is destructed, the destructor appends flush. 
  *    If severity is FATAL, the destructor causes SEGFAULT and core dump.
  *

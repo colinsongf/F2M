@@ -29,13 +29,17 @@ This file defines the data structures used by f2m.
 
 #include "src/common/common.h" 
 
-/* The float point type will be used to store feature values.
- */
+namespace f2m {
+
+/* The float point type will be used to 
+   store feature values. */
+
 typedef float real_t;
 
-/* The unsigned integer type will be used to store feature index.
- */
-typedef size_t index_t;
+/* The unsigned integer (32 bit) type will be 
+   used to store feature index. */
+
+typedef uint32 index_t;
 
 /* -----------------------------------------------------------------------------
  * DSVector (Dense-Sparse Vector) can store both the dense value and 
@@ -99,5 +103,7 @@ struct RowData {
 };
 
 typedef std::vector<RowData> DMatrix;
+
+} // namespace f2m
 
 #endif // F2M_COMMON_DATA_STRUCTURE_H_
