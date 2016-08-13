@@ -49,7 +49,9 @@ typedef uint32 index_t;
  * machine, data_ is the real value vector, position_ is empty.                 *
  *                                                                              *
  * For sparse value, such as the input trainning data, data_                    *         
- * is the sparse value vector and position_ stores the index of each value.     *                                                                             
+ * is the sparse value vector and position_ stores the index of each value.     *    
+ * Note that, we can not index one value in this sparse vector but just         *
+ * perform the vector operations (scan the whole value).                        *                                               
  *                                                                              *
  * Note that, we use this data strcuture to represent all of the models,        *
  * including Logistic Regresson, FM, as well as FFM.  In other words, we        *

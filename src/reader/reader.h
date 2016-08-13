@@ -34,54 +34,55 @@ in each iteration.
 namespace f2m {
 
 /* -----------------------------------------------------------------------------
- * We can use Reader class like this (it is not the real C++ code):
- *
- *   #include "reader.h"
- *
- *   // Constructor
- *   Reader reader(filename = "/tmp/testdata", 
- *                 num_samples = 100); 
- *
- *   Loop until converge {
- *
- *      Data = reader.Samples(); // return N data samples from disk file
- *
- *      ... use the data samples to train model
- *      
- *   }
- *
- *
- * We can set the number of N in construct funtion of Reader:
- * 
- *   N = 1 indicates that we use SGD.
- *   N = total_samples indicates that we use Bactch GD.
- *   others indicate that we use mini-batch GD.
- *
- * Before sampling, we can load all data into memory if the capacity
- * of your main memory is big enough for current training task:
- *
- *
- *   #include "reader.h"
- *
- *   // Constructor
- *   Reader reader(filename = "/tmp/testdata",
- *                 num_samples = 100,
- *                 in_memory = true); // read from memory
- *
- *   Loop until converge {
- *   
- *      Data = reader.Samples(); // return N data samples from memory
- *
- *      ... use the data samples to train model
- *
- *   }
- *
- * Reader is an algorithm-agnostic class and can mask the details of
- * the data source (on disk or in memory), and it is flexible for 
- * different gradient descent methods (e.g., SGD, mini-batch GD, and 
- * batch GD)
+ * We can use Reader class like this (it is not the real C++ code):             *
+ *                                                                              *
+ *   #include "reader.h"                                                        *
+ *                                                                              *
+ *   // Constructor                                                             *
+ *   Reader reader(filename = "/tmp/testdata",                                  *
+ *                 num_samples = 100);                                          *
+ *                                                                              *
+ *   Loop until converge {                                                      *
+ *                                                                              *
+ *      Data = reader.Samples(); // return N data samples from disk file        *
+ *                                                                              *
+ *      ... use the data samples to train model                                 *
+ *                                                                              *
+ *   }                                                                          *
+ *                                                                              *
+ *                                                                              *
+ * We can set the number of N in construct funtion of Reader:                   *
+ *                                                                              *
+ *   N = 1 indicates that we use SGD.                                           *
+ *   N = total_samples indicates that we use Bactch GD.                         *
+ *   others indicate that we use mini-batch GD.                                 *
+ *                                                                              *
+ * Before sampling, we can load all data into memory if the capacity            *
+ * of your main memory is big enough for current training task:                 *
+ *                                                                              *
+ *                                                                              *
+ *   #include "reader.h"                                                        *
+ *                                                                              *
+ *   // Constructor                                                             *
+ *   Reader reader(filename = "/tmp/testdata",                                  *
+ *                 num_samples = 100,                                           *
+ *                 in_memory = true); // read from memory                       *
+ *                                                                              *
+ *   Loop until converge {                                                      *
+ *                                                                              *
+ *      Data = reader.Samples(); // return N data samples from memory           *
+ *                                                                              *
+ *      ... use the data samples to train model                                 *
+ *                                                                              *
+ *   }                                                                          *
+ *                                                                              *
+ * Reader is an algorithm-agnostic class and can mask the details of            *
+ * the data source (on disk or in memory), and it is flexible for               *
+ * different gradient descent methods (e.g., SGD, mini-batch GD, and            *
+ * batch GD)                                                                    *
  * -----------------------------------------------------------------------------
  */
+
  typedef std::vector<std::string> StringList;
  
   class Reader {
@@ -93,8 +94,8 @@ namespace f2m {
   
     ~Reader();
  
-  /* Return a pointer to N lines of data samples.
-   */
+  /* Return a pointer to N lines of data samples. */
+    
   StringList* Samples();
 
  private:

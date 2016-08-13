@@ -32,8 +32,8 @@ namespace f2m {
 
 const int kDefaultMaxSizeLine = 100 * 1024; // 100 KB one line
 
-/* Constructor
- */
+/* Constructor */
+
 Reader::Reader(const std::string& filename,
                int num_samples,
                bool in_memory)
@@ -72,6 +72,8 @@ Reader::Reader(const std::string& filename,
   }
 }
 
+/* Destructor */
+
 Reader::~Reader() {
   if (file_ptr_ != NULL) {
     fclose(file_ptr_);
@@ -91,8 +93,8 @@ StringList* Reader::Samples() {
                       SampleFromDisk();
 }
 
-/* Sample data from disk files.
- */
+/* Sample data from disk files. */
+
 StringList* Reader::SampleFromDisk() {
   static char* line = new char[kDefaultMaxSizeLine];
   // read num_samples_ lines of data from disk file.
@@ -120,8 +122,8 @@ StringList* Reader::SampleFromDisk() {
 }
 
 /* Read one line from a memory buffer.
- * Used by Reader::SampleFromMemory()
- */
+   Used by Reader::SampleFromMemory() */
+
 int ReadLineFromMemory(char* line, char* buf, uint64 buf_len) {
   static uint64 start_position = 0;
   static uint64 end_position = 0;
@@ -141,8 +143,8 @@ int ReadLineFromMemory(char* line, char* buf, uint64 buf_len) {
   return read_size;
 }
 
-/* Sample data from a memory buffer.
- */
+/* Sample data from a memory buffer. */
+
 StringList* Reader::SampleFromMemory() {
   static char* line = new char[kDefaultMaxSizeLine];
   // read num_samples_ lines of data from memory
