@@ -75,8 +75,8 @@ class Loss {
    * ---------------------------------------------------------------------------
    */
 
-  virtual real_t Evaluate(const DSVector* pred,
-                          const DSVector* labels) const {
+  virtual real_t Evaluate(const DSVector& pred,
+                          const DSVector& labels) const {
     real_t objv = 0.0;
     for (size_t i = 0; i < pred_results.size(); ++i) {
       // some data set use 0 to represent the negative example.

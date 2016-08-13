@@ -61,9 +61,6 @@ This file is the implementation of common.h.
  * -----------------------------------------------------------------------------
  */
 
-#define LOG(severity)                                                     \
-  Logger(severity).Start(severity, __FILE__, __LINE__, __FUNCTION__)
-
 std::ofstream Logger::info_log_file_;
 std::ofstream Logger::warn_log_file_;
 std::ofstream Logger::erro_log_file_;

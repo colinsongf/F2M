@@ -33,43 +33,58 @@ This file defines the logistic regression loss.
 namespace f2m {
 
 /* -----------------------------------------------------------------------------
- * Logistic Regression Loss:
- * 
- *  math: l(x, y, w) = log(1 + exp(-y * <w, x>))
- *
+ * Logistic Regression Loss, Math:                                              *
+ *                                                                              *
+ *  [ loss(x, y, w) = log(1 + exp(-y * <w, x>)) ]                               *
+ *                                                                              *
  * -----------------------------------------------------------------------------
  */
+
 class LogitLoss : public Loss {
  public:
   ~Logistic() {}
 
   /* ---------------------------------------------------------------------------
-   * Given the input data matrix and current model, return the prediction 
-   * results. Note that the prediction result is represented as a real 
-   * number (float point type) in both classification and 
-   * regression problems. Math: 
-   *   
-   *  [ pred = X * w ] 
-   *
-   * where 'pred' is the prediction vector, X is the input data matrix, 
-   * w is current model parameter represented as a vector.
+   * Given the input data matrix and current model, return the prediction       *
+   * results. Math:                                                             *
+   *                                                                            *
+   *  [ pred = X * w ]                                                          *
+   *                                                                            *
+   * where 'pred' is the prediction vector, X is the input sparse data matrix,  *
+   * w is current model parameter represented as a dense vector.                *
    * ---------------------------------------------------------------------------
    */
+
   void Predict(const DMatrix& data_matrix,
                const DSVector& model_param,
                DSVector* pred);
 
   /* ---------------------------------------------------------------------------
-   * Given the input data matrix and current model, return 
-   * the calculated gradients. Math: 
-   *
-   *  [ pred = X * w ]
-   *  [ p = -y / (1 + exp(y * pred)) ]
-   *  [ grad = X * p ]
-   *
-   * where, 
+   * Given the input data matrix and current model, return                      *
+   * the calculated gradients. Math:                                            *
+   *                                                                            *
+   *  [ pred = X * w ]                                                          *
+   *                                                                            *
+   * where 'pred' is the prediction vector, X is input sparse data matarix,     *
+   * w is current model paramter represented as a dense vector.                 *
+   *                                                                            *
+   * for every single value of the pred vector,                                 *   
+   *                                                                            *
+   *  [ p[i] = -y / (1 + exp(y * pred[i])) ]                                    * 
+   *                                                                            *
+   * where y is current label, p is partial gradients.                          *
+   *                                                                            *
+   * finally, we can calculate the grandients.                                  * 
+   * For every single line of the data matrix,                                  *
+   *                                                                            *
+   *  [ X[i] *= p[i] ]                                                          *
+   *  [ grad += X[i] ]                                                          *
+   *  [ grad /= n ]                                                             *                                
+   *                                                                            *
+   * where n is the row number of the data matrix X.                            *
    * ---------------------------------------------------------------------------
    */
+
   void CalcGrad(const DMatrix& data_matrix,
                 const DSVector& model_param,
                 DSVector* grad);
