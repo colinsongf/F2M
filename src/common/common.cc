@@ -41,23 +41,23 @@ This file is the implementation of common.h.
  *  - The std::ostream reference is returned by LoggerStart(), passed to        *
  *    user-speific output operators (<<), which writes the log message boby.    *
  *                                                                              *
- *  - When the Logger instance is destructed, the destructor appends flush. 
- *    If severity is FATAL, the destructor causes SEGFAULT and core dump.
- *
- * It is important to flush in Logger::Start() after outputing message 
- * head because the time when the destructor is invoked  depends on how/where 
- * the caller code defines the Logger instance.
- *
- * If the caller code crashes before the Logger instance is properly
- * destructed, the destructor might not have the chance to append its flush 
- * flags. 
- *
- * Without flush in Logger::Start(), this may cause the lose of the last 
- * few messages. 
- *
- * However, given flush in Start(), program crashing between invocations to 
- * Logger::Start() and destructor only causes the lose of the last message body, 
- * while the message head will be there.
+ *  - When the Logger instance is destructed, the destructor appends flush.     * 
+ *    If severity is FATAL, the destructor causes SEGFAULT and core dump.       *
+ *                                                                              *
+ * It is important to flush in Logger::Start() after outputing message          *
+ * head because the time when the destructor is invoked  depends on how/where   *
+ * the caller code defines the Logger instance.                                 *
+ *                                                                              *
+ * If the caller code crashes before the Logger instance is properly            *
+ * destructed, the destructor might not have the chance to append its flush     *
+ * flags.                                                                       *
+ *                                                                              *
+ * Without flush in Logger::Start(), this may cause the lose of the last        *
+ * few messages.                                                                *
+ *                                                                              *
+ * However, given flush in Start(), program crashing between invocations to     *
+ * Logger::Start() and destructor only causes the lose of the last message      *
+ * body, while the message head will be there.                                  *
  * -----------------------------------------------------------------------------
  */
 
@@ -111,7 +111,7 @@ Logger::~Logger() {
 }
 
 /* -----------------------------------------------------------------------------
- * Implementation of the Hash functions
+ * Implementation of the Hash functions                                         *
  * -----------------------------------------------------------------------------
  */
 
@@ -255,14 +255,14 @@ unsigned int APHash(const std::string& str) {
 /* End Of AP Hash Function */
 
 /* -----------------------------------------------------------------------------
- * Implementation of the SplitString
+ * Implementation of the SplitString                                            *
  * -----------------------------------------------------------------------------
  */
 
 /* In most cases, delim contains only one character.  In this case, we
  * use CalculateReserveForVector to count the number of elements
- * should be reserved in result vector, and thus optimize SplitStringUsing.
- */
+ * should be reserved in result vector, and thus optimize SplitStringUsing. */
+
 static int CalculateReserveForVector(const string& full, const char* delim) {
   int count = 0;
   if (delim[0] != '\0' && delim[1] == '\0') {
@@ -304,10 +304,10 @@ void SplitStringToSetUsing(const string& full,
 }
 
 /* -----------------------------------------------------------------------------
- * Implementation of the StringPrintf
- * This code comes from the re2 project host on Google Code
- * (http://code.google.com/p/re2/), in particular, the following source file
- * http://code.google.com/p/re2/source/browse/util/stringprintf.cc
+ * Implementation of the StringPrintf                                           *
+ * This code comes from the re2 project host on Google Code                     *
+ * (http://code.google.com/p/re2/), in particular, the following source file    *
+ * http://code.google.com/p/re2/source/browse/util/stringprintf.cc              *
  * -----------------------------------------------------------------------------
  */
 

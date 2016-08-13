@@ -770,7 +770,7 @@ template <typename T>
 struct back_insert_iterator {
   explicit back_insert_iterator(T& t) : t_(t) {}
 
-  back_insert_iterator<T>& operator=(const typename T::value_type& value) {
+  back_insert_iterator<T>& operator=(const typename T::value_type& value)
     t_.push_back(value);
     return *this;
   }
@@ -821,7 +821,17 @@ void SplitStringToIteratorUsing(const StringType& full,
 
 /* -----------------------------------------------------------------------------
  * String join utilities. Here is an example:                                   *
+ *                                                                              *    
+ *  std::vector<std::string>  vec;                                              *
+ *  vec.push_back("apple");                                                     *
+ *  vec.push_back("banana");                                                    *
+ *  vec.push_back("orange");                                                    *
  *                                                                              *
+ *  std::string output;                                                         *
+ *  JoinStrings(vec.begin(), vec.end(), ",", &output);                          *
+ *  EXPECT_EQ("apple,banana,orange", output);                                   *
+ *  EXPECT_EQ("apple,banana,orange",                                            *
+ *            JoinStrings(vec.begin(), vec.end(), ","));                        *
  * -----------------------------------------------------------------------------
  */
 
@@ -862,6 +872,11 @@ std::string JoinStrings(const Container& container,
  *                                                                              *
  * Here is an example:                                                          *
  *                                                                              *
+ *   EXPECT_EQ(StringPrintf("%d"), 1), std::string("1"));                       *
+ *   std::string target;                                                        *
+ *   EXPECT_EQ(target, string("1"));                                            *
+ *   StringAppendF(&target, "%d", 2);                                           *
+ *   EXPECT_EQ(target, string("12"));                                           *                           
  * -----------------------------------------------------------------------------
  */
 
