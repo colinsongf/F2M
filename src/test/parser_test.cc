@@ -37,6 +37,7 @@ using f2m::Reader;
 using f2m::StringList;
 using f2m::Parser;
 using f2m::FFMParser;
+using f2m::DMatrix;
 
 const std::string filename_1 = "/tmp/reader-test-1.txt";
 const std::string filename_2 = "/tmp/reader-test-2.txt";

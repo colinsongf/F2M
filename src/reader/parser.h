@@ -37,20 +37,22 @@ namespace f2m {
 typedef std::vector<std::string> StringList;
 
 /* -----------------------------------------------------------------------------
- * The Parser class parse the StringList (Reader's output) to a DMatrix.
- *
- * In default, the Parse class parse the StringList to LR and FM format.
+ * The Parser class parse a set of StringList (Reader's output) to a DMatrix.   * 
+ * In default, the base Parse class parse the StringList to LR and FM format,   *
+ * and we can implement different inhert classes to parser data for other       *
+ * algorithms such as the FFMParser.                                            *
  * -----------------------------------------------------------------------------
  */
+
 class Parser {
  public:
   /* The matrix should be pre-initialized with the
-   * the same size of the StringList.
-   */
+     the same row size of the StringList. */
+
   virtual void Parse(const StringList* list, DMatrix* matrix) {
     CHECK_EQ(list->size(), matrix->size());
     for (int i = 0; i < list->size(); ++i) {
-      // parse the following format of one line:
+      // parse the following format:
       // [0:1234 1:0.123 2:0.21 3:1 4:1 5:0.05 0]
       StringList items;
       SplitStringUsing((*list)[i], "\t", &items);
@@ -61,6 +63,9 @@ class Parser {
         // the last element is y.
       	if (n == item_size - 1) {
       	  float value = atof(ch_ptr);
+      	  if (value != 0.0 && value != 1.0 && value != -1.0) {
+      	  	LOG(FATAL) << "Error of Y value: " << value;
+      	  }
       	  (*matrix)[i].feature_value_.push_back(value);
       	  break;
       	}
@@ -84,18 +89,19 @@ class Parser {
 };
 
 /* -----------------------------------------------------------------------------
- * FFMParser parse the StringList to a DMatrix of FFM format.
+ * FFMParser parse the StringList to a DMatrix of FFM format.                   *
  * -----------------------------------------------------------------------------
  */
+
 class FFMParser : public Parser {
  public:
   /* The matrix should be pre-initialized with the
-   * the same size of the StringList.
-   */
+     the same size of the StringList. */
+
   virtual void Parse(const StringList* list, DMatrix* matrix) {
     CHECK_EQ(list->size(), matrix->size());
     for (int i = 0; i < list->size(); ++i) {
-      // parse the following format of one line:
+      // parse the following format:
       // [1:1:1 2:2:1 3:3:1 3:4:1 4:5:0.999 1]
       StringList items;
       SplitStringUsing((*list)[i], "\t", &items);
@@ -106,6 +112,9 @@ class FFMParser : public Parser {
         // the last element is y.
         if (n == item_size - 1) {
           float value = atof(ch_ptr);
+          if (value != 0.0 && value != 1.0 && value != -1.0) {
+      	  	LOG(FATAL) << "Error of Y value: " << value;
+      	  }
           (*matrix)[i].feature_value_.push_back(value);
           break;
         }

@@ -34,12 +34,12 @@ core part of ML algorithms.
 namespace f2m {
 
 /* -----------------------------------------------------------------------------
- * The basic class of a loss function. Loss is an abstract class, 
- * which can be implemented by real loss functions such as logistic 
- * regresiion loss (logit_loss.h), FM loss (fm_loss.h), and FFM 
- * loss (ffm_loss.h).
- * The Loss class can be used in both classification and regression tasks.
- *-----------------------------------------------------------------------------
+ * The basic class of a loss function.                                          *
+ * Loss is an abstract class,  which can be implemented by real loss functions  *
+ * such as logistic regresiion loss (logit_loss.h), FM loss (fm_loss.h),        *
+ * and FFM loss (ffm_loss.h).                                                   *
+ * The Loss class can be used in both classification and regression tasks.      *
+ * -----------------------------------------------------------------------------
  */
 
 class Loss {
@@ -47,35 +47,39 @@ class Loss {
   virtual ~Loss() {}
 
   /* ---------------------------------------------------------------------------
-   * Given the input data matrix and current model, return the prediction 
-   * results. Note that the prediction result is represented as a real 
-   * number (float point type) in both classification and 
-   * regression problems.
+   * Given the input data matrix and current model, return the prediction       *
+   * results. Note that the prediction result is represented as a real          *
+   * number (float point type) in both classification and                       *
+   * regression problems.                                                       *
    * ---------------------------------------------------------------------------
    */
+
   virtual void Predict(const DMatrix& data_matrix, 
                        const DSVector& model_param,
                        DSVector* pred) = 0;
 
   /* ---------------------------------------------------------------------------
-   * Given the input data matrix and current model, return 
-   * the calculated gradients. 
+   * Given the input data matrix and current model, return                      *
+   * the calculated gradients.                                                  *
    * ---------------------------------------------------------------------------
    */
+
   virtual void CalcGrad(const DMatrix& data_matrix,
                         const DSVector& model_param,
                         DSVector* grad) = 0;
 
   /* ---------------------------------------------------------------------------
-   * Given the prediction results and the true labels, return  
-   * current loss value. Here we use LogLoss in default.
-   * Note that, in this LogLoss, the y is 1 or -1.
+   * Given the prediction results and the true labels, return                   *
+   * current loss value. Here we use LogLoss in default.                        *
+   * Note that, in this LogLoss, the y is -1, 0, or 1.                          *
    * ---------------------------------------------------------------------------
    */
+
   virtual real_t Evaluate(const DSVector* pred,
                           const DSVector* labels) const {
     real_t objv = 0.0;
     for (size_t i = 0; i < pred_results.size(); ++i) {
+      // some data set use 0 to represent the negative example.
       float y = label[i] > 0 ? 1 : -1;
       objv += log(1 + exp(- y * pred_results[i]));
     }

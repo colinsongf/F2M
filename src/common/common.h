@@ -95,6 +95,9 @@ class Logger {
   LogSeverity severity_;
 };
 
+#define LOG(severity)                                                     \
+  Logger(severity).Start(severity, __FILE__, __LINE__, __FUNCTION__)
+
 /* -----------------------------------------------------------------------------
  * In cases when the program must quit imediately (e.g., due to severe bugs),   *
  * CHECKxx macros invoke abort() to cause a core dump. To ensure the generation *
@@ -739,6 +742,7 @@ class scoped_array {
  *   substrings[2] == "banana"                                                  *
  * -----------------------------------------------------------------------------
  */
+
 void SplitStringUsing(const std::string& full,
                       const char* delim,
                       std::vector<std::string>* result);
@@ -770,7 +774,7 @@ template <typename T>
 struct back_insert_iterator {
   explicit back_insert_iterator(T& t) : t_(t) {}
 
-  back_insert_iterator<T>& operator=(const typename T::value_type& value)
+  back_insert_iterator<T>& operator=(const typename T::value_type& value) {
     t_.push_back(value);
     return *this;
   }
