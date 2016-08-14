@@ -146,6 +146,9 @@ class Model {
      and return the size of this vector */
 
   int GetV(real_t** pointer, int index) {
+    if (m_type == ModelType::LR) {
+      LOG(FATAL) << "Model type error: " << m_type;
+    }
     // 0 <= index < m_featire_num
     CHECK_GE(index, 0);
     CHECK_LT(m_feature_num);
@@ -157,6 +160,9 @@ class Model {
      and filed, and return the size of this vector */
 
   int GetV(real_t** pointer, int index, int filed) {
+    if (m_type != ModelType::FFM) {
+      LOG(FATAL) << "Model type error: " << m_type;
+    }
     // 0 <= index < m_feature_num
     CHECK_GE(index, 0);
     CHECK_LT(index, m_feature_num);
