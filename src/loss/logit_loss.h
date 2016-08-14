@@ -74,15 +74,10 @@ class LogitLoss : public Loss {
    *                                                                            *
    * where y is current label, p is partial gradients.                          *
    *                                                                            *
-   * Next, we can calculate the grandients.                                     * 
+   * Next, we can calculate the final grandients.                               * 
    * For every single line of the data matrix,                                  *
    *                                                                            *
-   *  [ X[i] *= p[i] ]                                                          *
-   *  [ grad += X[i] ]                                                          *
-   *                                                                            *
-   * Finally,                                                                   *
-   *                                                                            *
-   *  [ grad /= n ]                                                             *                                
+   *  [ grad += X[i] * p[i] ]                                                   *                            
    *                                                                            *
    * where n is the row number of the data matrix X.                            *
    * ---------------------------------------------------------------------------
