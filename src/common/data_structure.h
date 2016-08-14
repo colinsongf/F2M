@@ -110,8 +110,8 @@ class Model {
        m_type(type) {
     // check the value
     CHECK_GT(m_feature_num, 0);
-    CHECK_GT(m_k, 0);
-    CHECK_GT(m_filed_num, 0);
+    CHECK_GE(m_k, 0);
+    CHECK_GE(m_filed_num, 0);
     // allocated memory space for the model parameters
     try {
       if (m_type == ModelType::LR) {
@@ -133,6 +133,39 @@ class Model {
       LOG(FATAL) << "Cannot not allocate enough memory for   \
                      current model parameters."
     }
+  }
+
+  /* return the start pointer of w and its size */
+
+  index_t GetW(real_t** pointer) { 
+    pointer = m_parameters.get();
+    return m_feature_num;
+  }
+
+  /* return the start pointer of a vector for specified feature,
+     and return the size of this vector */
+
+  int GetV(real_t** pointer, int index) {
+    // 0 <= index < m_featire_num
+    CHECK_GE(index, 0);
+    CHECK_LT(m_feature_num);
+    *pointer = m_parameters.get() + m_feature_num + m_k * index;
+    return m_k;
+  }
+
+  /* return the start pointer of a vector for specified feature 
+     and filed, and return the size of this vector */
+
+  int GetV(real_t** pointer, int index, int filed) {
+    // 0 <= index < m_feature_num
+    CHECK_GE(index, 0);
+    CHECK_LT(index, m_feature_num);
+    // 0 <= filed < m_filed_num
+    CHECK_GE(filed, 0);
+    CHECK_LT(filed, m_filed_num);
+    *pointer = m_parameters.get() + m_feature_num + 
+               m_k * m_filed_num * index + m_k * filed;
+    return m_k;
   }
 
  private:
