@@ -83,19 +83,19 @@ namespace f2m {
  * -----------------------------------------------------------------------------
  */
 
- typedef std::vector<std::string> StringList;
+typedef std::vector<std::string> StringList;
  
-  class Reader {
-   public:
-    Reader(const std::string& filename,
-           int num_samples,
-           bool in_memory = false);  /* Reader samples data from disk 
-                                        file in defualt.*/
+class Reader {
+ public:
+  Reader(const std::string& filename,
+         int num_samples,
+         bool in_memory = false);  /* Reader samples data from disk 
+                                      file in defualt.*/
   
-    ~Reader();
+  ~Reader();
  
   /* Return a pointer to N lines of data samples. */
-    
+
   StringList* Samples();
 
  private:

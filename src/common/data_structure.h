@@ -89,20 +89,61 @@ struct SparseRow {
 typedef std::vector<SparseRow> DataMatrix;
 
 /* -----------------------------------------------------------------------------
- * DataMatrix is responsble for storing the input data matrix.                  *
+ * Model is responsble for storing the global model parameters.                 *
  *                                                                              *
- * Each row of the matrix is a SparseRow structure, which stores                *
- * sparse input data.                                                           *
+ * Note that, we represent the machine leanring model in a flat way, that is,   *
+ * we store all the parameters in a single dense vector.                        *                          
  * -----------------------------------------------------------------------------
  */
 
- struct Model {
- 
+enum ModelType { LR, FM, FFM };
 
- };
+class Model {
+ public:
+  /* Constructor */
 
+  Model(real_t init_value, index_t feature_num, 
+        int k, int filed_num, ModelType type)
+     : m_feature_num(feature_num), 
+       m_k(k), 
+       m_filed_num(filed_num),
+       m_type(type) {
+    // check the value
+    CHECK_GT(m_feature_num, 0);
+    CHECK_GT(m_k, 0);
+    CHECK_GT(m_filed_num, 0);
+    // allocated memory space for the model parameters
+    try {
+      if (m_type == ModelType::LR) {
+        // note that we ignore the w0.
+        m_parameters = new real_t[m_feature_num];
+      } else if (m_type == ModelType::FM) {
+        // for FM, the size of model parameters is:
+        // m_feature_num + m_feature_num * k
+        m_parameters = new real_t[m_feature_num + m_feature_num * m_k];
+      } else if (m_type == ModelType::FFM) {
+        // For FFM, the size of model paramters is:
+        // m_feature_num + m_feature_num * k * filed_num
+        m_parameters = new real_t[m_feature_num + 
+                                  m_feature_num * m_k * m_filed_num];
+      } else {
+        LOG(FATAL) << "Unknow model type: " << type;
+      }
+    } catch (std::bad_alloc&) {
+      LOG(FATAL) << "Cannot not allocate enough memory for   \
+                     current model parameters."
+    }
+  }
 
+ private:
+  scoped_array<real_t> m_parameters;   /* To store the model parameters */
+  ModelType m_type;                    /* Model type: LR, FM, or FFM */
+  index_t m_feature_num;               /* number of features */ 
+  int m_k;                             /* The size of k (for FM and FFM) */
+  int m_filed_num;                     /* The number of filed (only for FFM) */
 
+  DISALLOW_COPY_AND_ASSIGN(Model);
+};
 
 } // namespace f2m
 
