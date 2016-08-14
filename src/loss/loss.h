@@ -78,8 +78,9 @@ class Loss {
   virtual real_t Evaluate(const DSVector& pred,
                           const DSVector& labels) const {
     real_t objv = 0.0;
-    for (size_t i = 0; i < pred_results.size(); ++i) {
-      // some data set use 0 to represent the negative example.
+    for (size_t i = 0; i < pred.size(); ++i) {
+      // some data set use 0 to represent 
+      // the negative example.
       float y = label[i] > 0 ? 1 : -1;
       objv += log(1 + exp(- y * pred_results[i]));
     }

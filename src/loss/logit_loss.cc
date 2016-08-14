@@ -28,39 +28,60 @@ This file implements the logit_loss.h
 #include "src/common/data_structure.h"
 #include "src/common/linear_algebra.h"
 
-/* ---------------------------------------------------------------------------
- * Given the input data matrix and current model, return the prediction 
- * results. Note that the prediction result is represented as a real 
- * number (float point type) in both classification and 
- * regression problems. Math: 
- *   
- *  [ pred += X * w ] 
- *
- * where 'pred' is the prediction vector, X is the input data matrix, 
- * w is current model parameter represented as a vector.
- * ---------------------------------------------------------------------------
- */
+  /* ---------------------------------------------------------------------------
+   * Given the input data matrix and current model, return the prediction       *
+   * results. Math:                                                             *
+   *                                                                            *
+   *  [ pred = X * w ]                                                          *
+   *                                                                            *
+   * where 'pred' is the prediction vector, X is the input sparse data matrix,  *
+   * w is current model parameter represented as a dense vector.                *
+   * ---------------------------------------------------------------------------
+   */
 
-void LogitLoss::Predict(const DMatrix& data_matrix,
-                        const DSVector& model_param,
-                        DSVector* pred) {
-  
-}
+  void Predict(const DMatrix& data_matrix,
+               const DSVector& model_param,
+               DSVector* pred) {
+  	// We must pre-allocate the pred vector.
+  	pred.resize(data_matrix.size());
+  	// for every row in a data matrix.
+  	for (int row = 0; row < data_matrix.size(); ++row) {
+  	  real_t value = 0.0;
+  	  // for every element in RowData.
+  	  for (int j = 0; j < data_matrix[row].feature_index_.size(); ++j) {
+  	  	index_t idx = data_matrix[row].feature_index_[j];
+  	  	value += data_matrix[row].feature_value_[j] * model_param.data_[index];
+  	  }
+  	  pred->data_[row] = value;
+  	}
+  }
 
-/* ---------------------------------------------------------------------------
- * Given the input data matrix and current model, return 
- * the calculated gradients. Math: 
- *
- *  [ pred = X * w ]
- *  [ p = -y / (1 + exp(y * pred)) ]
- *  [ grad += X' * p ]
- *
- * where, 
- * ---------------------------------------------------------------------------
- */
+  /* ---------------------------------------------------------------------------
+   * Given the input data matrix and current model, return                      *
+   * the calculated gradients. Math:                                            *
+   *                                                                            *
+   *  [ pred = X * w ]                                                          *
+   *                                                                            *
+   * where 'pred' is the prediction vector, X is input sparse data matarix,     *
+   * w is current model paramter represented as a dense vector.                 *
+   *                                                                            *
+   * for every single value of the pred vector,                                 *   
+   *                                                                            *
+   *  [ p[i] = -y / (1 + exp(y * pred[i])) ]                                    * 
+   *                                                                            *
+   * where y is current label, p is partial gradients.                          *
+   *                                                                            *
+   * Next, we can calculate the final grandients.                               * 
+   * For every single line of the data matrix,                                  *
+   *                                                                            *
+   *  [ grad += X[i] * p[i] ]                                                   *                            
+   *                                                                            *
+   * where n is the row number of the data matrix X.                            *
+   * ---------------------------------------------------------------------------
+   */
 
-void LogitLoss::CalcGrad(const DMatrix& data_matrix,
-                         const DSVector& model_param,
-                         DSVector* grad) {
+  void CalcGrad(const DMatrix& data_matrix,
+                const DSVector& model_param,
+                DSVector* grad) {
 
-}
+  }

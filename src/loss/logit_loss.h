@@ -42,7 +42,7 @@ namespace f2m {
 
 class LogitLoss : public Loss {
  public:
-  ~Logistic() {}
+  ~LogitLoss() {}
 
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return the prediction       *
@@ -68,16 +68,16 @@ class LogitLoss : public Loss {
    * where 'pred' is the prediction vector, X is input sparse data matarix,     *
    * w is current model paramter represented as a dense vector.                 *
    *                                                                            *
-   * for every single value of the pred vector,                                 *   
+   * for every single value of the pred vector,                                 *
    *                                                                            *
-   *  [ p[i] = -y / (1 + exp(y * pred[i])) ]                                    * 
+   *  [ p[i] = -y / (1 + exp(y * pred[i])) ]                                    *
    *                                                                            *
    * where y is current label, p is partial gradients.                          *
    *                                                                            *
-   * Next, we can calculate the final grandients.                               * 
+   * Next, we can calculate the final grandients.                               *
    * For every single line of the data matrix,                                  *
    *                                                                            *
-   *  [ grad += X[i] * p[i] ]                                                   *                            
+   *  [ grad += X[i] * p[i] ]                                                   *
    *                                                                            *
    * where n is the row number of the data matrix X.                            *
    * ---------------------------------------------------------------------------

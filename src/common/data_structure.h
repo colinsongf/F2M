@@ -42,69 +42,67 @@ typedef float real_t;
 typedef uint32 index_t;
 
 /* -----------------------------------------------------------------------------
- * DSVector (Dense-Sparse Vector) can store both the dense value and            *
- * the sparse value.                                                            *
+ * SparseRow can store the sparse value such as the input training data.        *
  *                                                                              *
- * For dense value, such as the global model parameter on a single              *
- * machine, data_ is the real value vector, position_ is empty.                 *
+ * For SparseRow, the filed of data_  stores the real data vector and           *
+ * the filed of position_ stores their index.                                   *
  *                                                                              *
- * For sparse value, such as the input trainning data, data_                    *         
- * is the sparse value vector and position_ stores the index of each value.     *    
- * Note that, we can not index one value in this sparse vector but just         *
- * perform the vector operations (scan the whole value).                        *                                               
+ * Note that, we can not index any value in this data structure and just        *
+ * can scan the whole value.                                                    *
  *                                                                              *
- * Note that, we use this data strcuture to represent all of the models,        *
- * including Logistic Regresson, FM, as well as FFM.  In other words, we        *
- * represent these models in a flat way.                                        *
- *                                                                              *
- * For FM, to parse the model, we also need to know the number of K.            *
- * For FFM, in addition to the K, we also need to know the field number.        *
- * All of this information is stored in the Loss class, and is setted by        *
- * users' input arguments.                                                      *
+ * scoped_array<real_t> data is equal to real_t* data, the only difference is   *
+ * that scoped_array<real_t> will delete the allocated memory automitically.    *
  * -----------------------------------------------------------------------------
  */
 
-struct DSVector {
+struct SparseRow {
   /* The real value vector */
 
-  std::vector<real_t> data_;
+  scoped_array<real_t> x;
 
   /* The value postion (optional) */
 
-  std::vector<index_t> position_;
+  scoped_array<index_t> position;
+
+  /* The field number. (optional, only for FFM) */
+  
+  scoped_array<int> field;
+
+  /* y can be -1 (for negative examples), 
+     or 1 (for positive examples) */
+
+  int y;
+
+  /* size of current row */
+
+  uint32 size;
 };
 
-/* To check a vector is sparse or dense. */
-
-bool IsASparseVector(const DSVector& vec) {
-  return (!vec.position_.empty());
-}
-
 /* -----------------------------------------------------------------------------
- * DMatrix (data matrix) is responsble for storing the input data set.          *      
- * (in one mini-batch).                                                         *
+ * DataMatrix is responsble for storing the input data matrix.                  *
  *                                                                              *
- * Each row of the DMatrix is a RowData structure, which stores the sparse      *
- * data of each input line.                                                     *
+ * Each row of the matrix is a SparseRow structure, which stores                *
+ * sparse input data.                                                           *
  * -----------------------------------------------------------------------------
  */
 
-struct RowData {
-  /* The input feature values. 
-     The last element is y (-1, 0, or 1). */
+typedef std::vector<SparseRow> DataMatrix;
 
-  std::vector<real_t> feature_value_;
+/* -----------------------------------------------------------------------------
+ * DataMatrix is responsble for storing the input data matrix.                  *
+ *                                                                              *
+ * Each row of the matrix is a SparseRow structure, which stores                *
+ * sparse input data.                                                           *
+ * -----------------------------------------------------------------------------
+ */
 
-  /* The positions of these features value. */
+ struct Model {
+ 
 
-  std::vector<index_t> feature_index_;
+ };
 
-  /* The field number. (optional, only for FFM) */
 
-  std::vector<int> field_;
-};
 
-typedef std::vector<RowData> DMatrix;
 
 } // namespace f2m
 
