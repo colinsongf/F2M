@@ -37,7 +37,7 @@ using f2m::Reader;
 using f2m::StringList;
 using f2m::Parser;
 using f2m::FFMParser;
-using f2m::DMatrix;
+using f2m::DataMatrix;
 
 const std::string filename_1 = "/tmp/reader-test-1.txt";
 const std::string filename_2 = "/tmp/reader-test-2.txt";
@@ -87,7 +87,7 @@ class ParserTest : public ::testing::Test {
 TEST_F(ParserTest, LR_and_FM) {
   StringList *samples = NULL;
   Reader reader(filename_1, num_line); // sample 10 records at each time.
-  DMatrix matrix(num_line);
+  DataMatrix matrix(num_line);
   Parser parser;
   // 100 iterations
   for (int i = 0; i < num_iteration; ++i) {
@@ -98,15 +98,14 @@ TEST_F(ParserTest, LR_and_FM) {
     }
     parser.Parse(samples, &matrix);
     for (int n = 0; n < num_line; ++n) {
-      EXPECT_EQ(matrix[n].feature_index_.size(), 6);
-      EXPECT_EQ(matrix[n].feature_value_.size(), 7);
-      EXPECT_EQ(matrix[n].feature_value_[num_data], 0.0);
+      EXPECT_EQ(matrix[n].y, 0.0);
+      EXPECT_EQ(matrix[n].size, 6);
       for (int k = 0; k < num_data; ++k) {
-      	EXPECT_EQ(matrix[n].feature_index_[k], k);
+      	EXPECT_EQ(matrix[n].position[k], k);
       }
       for (int k = 0; k < num_data; ++k) {
       	float value = atof(testdata[k].c_str());
-      	EXPECT_EQ(matrix[n].feature_value_[k], value);
+      	EXPECT_EQ(matrix[n].x[k], value);
       }
     }
   }
@@ -115,7 +114,7 @@ TEST_F(ParserTest, LR_and_FM) {
 TEST_F(ParserTest, FFM) {
   StringList *samples = NULL;
   Reader reader(filename_2, num_line); // sample 10 records at each time.
-  DMatrix matrix(num_line);
+  DataMatrix matrix(num_line);
   FFMParser parser;
   // 100 iterations
   for (int i = 0; i < num_iteration; ++i) {
@@ -126,19 +125,17 @@ TEST_F(ParserTest, FFM) {
     }
     parser.Parse(samples, &matrix);
     for (int n = 0; n < num_line; ++n) {
-      EXPECT_EQ(matrix[n].feature_index_.size(), 6);
-      EXPECT_EQ(matrix[n].field_.size(), 6);
-      EXPECT_EQ(matrix[n].feature_value_.size(), 7);
-      EXPECT_EQ(matrix[n].feature_value_[num_data], 1.0);
+      EXPECT_EQ(matrix[n].size, 6);
+      EXPECT_EQ(matrix[n].y, 1.0);
       for (int k = 0; k < num_data; ++k) {
-      	EXPECT_EQ(matrix[n].feature_index_[k], k);
+      	EXPECT_EQ(matrix[n].position[k], k);
       }
       for (int k = 0; k < num_data; ++k) {
       	float value = atof(testdata[k].c_str());
-      	EXPECT_EQ(matrix[n].feature_value_[k], value);
+      	EXPECT_EQ(matrix[n].x[k], value);
       }
       for (int k = 0; k < num_data; ++k) {
-      	EXPECT_EQ(matrix[n].field_[k], 1.0);
+      	EXPECT_EQ(matrix[n].field[k], 1.0);
       }
     }
   }

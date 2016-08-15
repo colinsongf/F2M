@@ -30,6 +30,23 @@ programming more convennient.
 #ifndef _MSC_VER
 #include <stdint.h> // Linux, MacOSX and Cygwin has this standard header.
 #endif
+
+#if defined _WIN32
+# ifndef WIN32_LEAN_AND_MEAN
+#  define WIN32_LEAN_AND_MEAN
+# endif
+# ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0501  // windows xp
+# endif
+# define NOMINMAX 1
+# include <windows.h>
+#elif defined __unix__ || defined __APPLE__
+# include <pthread.h>
+# include <sys/time.h>
+#else
+# error Unknown platform
+#endif
+
 #include <assert.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -45,21 +62,6 @@ programming more convennient.
 #include <vector>
 #include <algorithm>
 #include <stdexcept>
-
-#if defined _WIN32
-# ifndef WIN32_LEAN_AND_MEAN
-#  define WIN32_LEAN_AND_MEAN
-# endif
-# ifndef _WIN32_WINNT
-#  define _WIN32_WINNT 0x0501  // windows xp
-# endif
-# define NOMINMAX 1
-# include <windows.h>
-#elif defined __unix__
-# include <pthread.h>
-#else
-# error Unknown platform
-#endif
 
 using std::string;
 using std::vector;
@@ -908,6 +910,9 @@ void StringAppendF(std::string* dst, const char* format, ...);
 
 /* -----------------------------------------------------------------------------
  * scoped_locker                                                                *
+ * This implementation is a copy from :                                         *
+ *   http://tc-svn.tencent.com/setech/setech_infrastructure_rep/Infra_proj/     *
+ *   trunk/src/common/system/concurrency/scoped_locker.hpp                      *                         
  * -----------------------------------------------------------------------------
  */
 
@@ -952,10 +957,13 @@ class ScopedWriterLocker {
 
 /* -----------------------------------------------------------------------------
  * Mutex                                                                        *
+ * This implementation is a copy from                                           *
+ *   http://tc-svn.tencent.com/setech/setech_infrastructure_rep/Infra_proj/     *
+ *   trunk/src/common/system/concurrency/mutex.hpp                              *    
  * -----------------------------------------------------------------------------
  */
 
- class ConditionVariable;
+class ConditionVariable;
 
 #if defined _WIN32
 
@@ -979,7 +987,6 @@ class Mutex {
 
   void Lock() {
     ::EnterCriticalSection(&m_Mutex);
-    assert(IsLocked());
   }
 
   bool TryLock() {
@@ -987,15 +994,7 @@ class Mutex {
   }
 
   void Unlock() {
-    assert(IsLocked());
     ::LeaveCriticalSection(&m_Mutex);
-  }
-
-  bool IsLocked() const {
-    if (IsNewBehavior())  // after win2k3 sp1
-      return (m_Mutex.LockCount & 1) == 0;
-    else
-      return m_Mutex.LockCount >= 0;
   }
 
  private:
@@ -1026,7 +1025,7 @@ class Mutex {
   friend class Cond;
 };
 
-#elif defined __unix__
+#elif defined __unix__ || defined __APPLE__
 
 class Mutex {
  public:
@@ -1054,7 +1053,6 @@ class Mutex {
 
   void Lock() {
     CheckError("Mutex::Lock", pthread_mutex_lock(&m_Mutex));
-    assert(IsLocked());
   }
 
   bool TryLock() {
@@ -1067,13 +1065,7 @@ class Mutex {
     }
   }
 
-  // by inspect internal data
-  bool IsLocked() const {
-    return m_Mutex.__data.__lock > 0;
-  }
-
   void Unlock() {
-    assert(IsLocked());
     CheckError("Mutex::Unlock", pthread_mutex_unlock(&m_Mutex));
     // NOTE: can't check unlocked here, maybe already locked by
     // other thread
@@ -1118,16 +1110,40 @@ class NullMutex {
     return true;
   }
 
-  // by inspect internal data
-  bool IsLocked() const {
-    return m_locked;
-  }
-
   void Unlock() {
     m_locked = false;
   }
  private:
   bool m_locked;
+};
+
+/* -----------------------------------------------------------------------------
+ * ConditionVariable                                                            *
+ * This implementation is a copy from                                           *
+ *   http://tc-svn.tencent.com/setech/setech_infrastructure_rep/Infra_proj/     *
+ *   trunk/src/common/system/concurrency/condition_variable.hpp                 *    
+ * -----------------------------------------------------------------------------
+ */
+
+class ConditionVariable {
+ public:
+  ConditionVariable();
+  ~ConditionVariable();
+
+  void Signal();
+  void Broadcast();
+
+  bool Wait(Mutex* inMutex, int inTimeoutInMilSecs);
+  void Wait(Mutex* inMutex);
+
+ private:
+#if defined _WIN32
+  HANDLE m_hCondition;
+  unsigned int m_nWaitCount;
+#elif defined __unix__ || defined __APPLE__
+  pthread_cond_t m_hCondition;
+#endif
+  static void CheckError(const char* context, int error);
 };
 
 #endif // F2M_COMMON_COMMON_H_

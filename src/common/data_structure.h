@@ -44,8 +44,8 @@ typedef uint32 index_t;
 /* -----------------------------------------------------------------------------
  * SparseRow can store the sparse value such as the input training data.        *
  *                                                                              *
- * For SparseRow, the filed of data_  stores the real data vector and           *
- * the filed of position_ stores their index.                                   *
+ * For SparseRow, the field of data_  stores the real data vector and           *
+ * the field of position_ stores their index.                                   *
  *                                                                              *
  * Note that, we can not index any value in this data structure and just        *
  * can scan the whole value.                                                    *
@@ -102,43 +102,40 @@ class Model {
  public:
   /* Constructor */
 
-  Model(real_t init_value, index_t feature_num, 
-        int k, int filed_num, ModelType type)
+  Model(real_t init_value, ModelType type, 
+        index_t feature_num, int k, int field_num)
      : m_feature_num(feature_num), 
        m_k(k), 
-       m_filed_num(filed_num),
-       m_type(type) {
-    // check the value
+       m_field_num(field_num) {
+    // check the input value
     CHECK_GT(m_feature_num, 0);
-    CHECK_GE(m_k, 0);
-    CHECK_GE(m_filed_num, 0);
-    // allocated memory space for the model parameters
+    // Note that, for LR, m_k and m_field_num should be set to 0.
+    // For FM, just m_field_num should be set to 0.
+    CHECK_GE(m_k, 0);          
+    CHECK_GE(m_field_num, 0);
+    // allocated memory and initial model parameters 
+    if (type == LR) {
+      m_size_parameters = m_feature_num;
+    } else if (type == FM) {
+      m_size_parameters = m_feature_num * (1 + m_k);
+    } else if (type == FFM) {
+      m_size_parameters = m_feature_num * (1 + m_k * m_field_num);
+    } else {
+      LOG(FATAL) << "Unknow model type: " << type;
+    }
     try {
-      if (m_type == ModelType::LR) {
-        // note that we ignore the w0.
-        m_parameters = new real_t[m_feature_num];
-      } else if (m_type == ModelType::FM) {
-        // for FM, the size of model parameters is:
-        // m_feature_num + m_feature_num * k
-        m_parameters = new real_t[m_feature_num + m_feature_num * m_k];
-      } else if (m_type == ModelType::FFM) {
-        // For FFM, the size of model paramters is:
-        // m_feature_num + m_feature_num * k * filed_num
-        m_parameters = new real_t[m_feature_num + 
-                                  m_feature_num * m_k * m_filed_num];
-      } else {
-        LOG(FATAL) << "Unknow model type: " << type;
-      }
+      m_parameters.reset(new real_t[m_size_parameters]);
+      Initialize(init_value, m_size_parameters);
     } catch (std::bad_alloc&) {
       LOG(FATAL) << "Cannot not allocate enough memory for   \
-                     current model parameters."
+                     current model parameters.";
     }
   }
 
-  /* return the start pointer of w and its size */
+  /* return a start pointer of w and its size */
 
   index_t GetW(real_t** pointer) { 
-    pointer = m_parameters.get();
+    *pointer = m_parameters.get();
     return m_feature_num;
   }
 
@@ -146,40 +143,42 @@ class Model {
      and return the size of this vector */
 
   int GetV(real_t** pointer, int index) {
-    if (m_type == ModelType::LR) {
-      LOG(FATAL) << "Model type error: " << m_type;
-    }
-    // 0 <= index < m_featire_num
+    // 0 <= index < m_feature_num
     CHECK_GE(index, 0);
-    CHECK_LT(m_feature_num);
+    CHECK_LT(index, m_feature_num);
     *pointer = m_parameters.get() + m_feature_num + m_k * index;
     return m_k;
   }
 
   /* return the start pointer of a vector for specified feature 
-     and filed, and return the size of this vector */
+     and field, and return the size of this vector */
 
-  int GetV(real_t** pointer, int index, int filed) {
-    if (m_type != ModelType::FFM) {
-      LOG(FATAL) << "Model type error: " << m_type;
-    }
+  int GetV(real_t** pointer, int index, int field) {
     // 0 <= index < m_feature_num
     CHECK_GE(index, 0);
     CHECK_LT(index, m_feature_num);
-    // 0 <= filed < m_filed_num
-    CHECK_GE(filed, 0);
-    CHECK_LT(filed, m_filed_num);
+    // 0 <= field < m_field_num
+    CHECK_GE(field, 0);
+    CHECK_LT(field, m_field_num);
     *pointer = m_parameters.get() + m_feature_num + 
-               m_k * m_filed_num * index + m_k * filed;
+               m_k * m_field_num * index + m_k * field;
     return m_k;
   }
 
  private:
   scoped_array<real_t> m_parameters;   /* To store the model parameters */
-  ModelType m_type;                    /* Model type: LR, FM, or FFM */
   index_t m_feature_num;               /* number of features */ 
   int m_k;                             /* The size of k (for FM and FFM) */
-  int m_filed_num;                     /* The number of filed (only for FFM) */
+  int m_field_num;                     /* The number of field (only for FFM) */
+  index_t m_size_parameters;           /* The size of total parameters */
+
+  /* Initial the model parameters */
+
+  void Initialize(real_t init_value, index_t length) {
+    for (index_t i = 0; i < length; ++i) {
+      *(m_parameters.get() + i) = init_value;
+    }
+  }
 
   DISALLOW_COPY_AND_ASSIGN(Model);
 };

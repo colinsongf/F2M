@@ -22,3 +22,6 @@ Author: Chao Ma (mctt90@gmail.com)
 Unit Test for Model class (data_structure.h)
 */
 
+#include "gtest/gtest.h"
+
+#include "src/common/data_structure.h"
