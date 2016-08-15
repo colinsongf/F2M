@@ -26,6 +26,7 @@ core part of ML algorithms.
 #ifndef F2M_LOSS_LOSS_H_
 #define F2M_LOSS_LOSS_H_
 
+#include <vector>
 #include <cmath>  // for log() and exp()
 
 #include "src/common/common.h"
@@ -54,9 +55,9 @@ class Loss {
    * ---------------------------------------------------------------------------
    */
 
-  virtual void Predict(const DMatrix& data_matrix, 
-                       const DSVector& model_param,
-                       DSVector* pred) = 0;
+  virtual void Predict(const DataMatrix& matrix, 
+                       const Model& param,
+                       std::vector<int>* pred) = 0;
 
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return                      *
@@ -64,9 +65,9 @@ class Loss {
    * ---------------------------------------------------------------------------
    */
 
-  virtual void CalcGrad(const DMatrix& data_matrix,
-                        const DSVector& model_param,
-                        DSVector* grad) = 0;
+  virtual void CalcGrad(const DataMatrix& matrix,
+                        const Model& param,
+                        SparseGrad* grad) = 0;
 
   /* ---------------------------------------------------------------------------
    * Given the prediction results and the true labels, return                   *
@@ -75,8 +76,8 @@ class Loss {
    * ---------------------------------------------------------------------------
    */
 
-  virtual real_t Evaluate(const DSVector& pred,
-                          const DSVector& labels) const {
+  virtual real_t Evaluate(const std::vector<int>& pred,
+                          const std::vector<int>& labels) const {
     real_t objv = 0.0;
     for (size_t i = 0; i < pred.size(); ++i) {
       // some data set use 0 to represent 

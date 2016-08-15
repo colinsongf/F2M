@@ -88,6 +88,19 @@ struct SparseRow {
 
 typedef std::vector<SparseRow> DataMatrix;
 
+
+/* -----------------------------------------------------------------------------
+ * DataMatrix is responsble for storing the input data matrix.                  *
+ *                                                                              *
+ * Each row of the matrix is a SparseRow structure, which stores                *
+ * sparse input data.                                                           *
+ * -----------------------------------------------------------------------------
+ */
+
+struct SparseGrad {
+
+};
+
 /* -----------------------------------------------------------------------------
  * Model is responsble for storing the global model parameters.                 *
  *                                                                              *
@@ -132,15 +145,16 @@ class Model {
     }
   }
 
-  /* return a start pointer of w and its size */
+  /* Return a start pointer of w and its size. 
+     Used by LR, FM, and FFM */
 
   index_t GetW(real_t** pointer) { 
     *pointer = m_parameters.get();
     return m_feature_num;
   }
 
-  /* return the start pointer of a vector for specified feature,
-     and return the size of this vector */
+  /* Return the start pointer of a vector for specified feature,
+     and return the size of this vector. Used by FM */
 
   int GetV(real_t** pointer, int index) {
     // 0 <= index < m_feature_num
@@ -150,8 +164,8 @@ class Model {
     return m_k;
   }
 
-  /* return the start pointer of a vector for specified feature 
-     and field, and return the size of this vector */
+  /* Return the start pointer of a vector for specified feature 
+     and field, and return the size of this vector. Used by FFM */
 
   int GetV(real_t** pointer, int index, int field) {
     // 0 <= index < m_feature_num
@@ -174,9 +188,9 @@ class Model {
 
   /* Initial the model parameters */
 
-  void Initialize(real_t init_value, index_t length) {
-    for (index_t i = 0; i < length; ++i) {
-      *(m_parameters.get() + i) = init_value;
+  void Initialize(real_t init_val, index_t len) {
+    for (index_t i = 0; i < len; ++i) {
+      *(m_parameters.get() + i) = init_val;
     }
   }
 

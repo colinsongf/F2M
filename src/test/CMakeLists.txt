@@ -6,3 +6,6 @@ target_link_libraries(reader_test gtest_main ${LIBS})
 
 add_executable(parser_test parser_test.cc)
 target_link_libraries(parser_test gtest_main ${LIBS})
+
+add_executable(model_test model_test.cc)
+target_link_libraries(model_test gtest_main ${LIBS})

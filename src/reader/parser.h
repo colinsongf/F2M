@@ -93,7 +93,7 @@ class Parser {
 };
 
 /* -----------------------------------------------------------------------------
- * FFMParser parse the StringList to a DataMatrix of FFM format.                   *
+ * FFMParser parse the StringList to a DataMatrix of FFM format.                *
  * -----------------------------------------------------------------------------
  */
 
