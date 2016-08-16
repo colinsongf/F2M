@@ -90,15 +90,42 @@ typedef std::vector<SparseRow> DataMatrix;
 
 
 /* -----------------------------------------------------------------------------
- * DataMatrix is responsble for storing the input data matrix.                  *
+ * SparseGrad is response for storing the calculated gradients.                 *
  *                                                                              *
- * Each row of the matrix is a SparseRow structure, which stores                *
- * sparse input data.                                                           *
+ * Note that, for LR, we only need the grad_w, position_w, and size_w.          *
+ * For FFM, we need all the fields in this data structure.                      *
+ * For FM, we need all the fields in this data structure except field_v.        *
  * -----------------------------------------------------------------------------
  */
 
 struct SparseGrad {
+ /* The gradient of w */
 
+ scoped_array<real_t> grad_w;
+
+ /* The position of grad_w */
+
+ scoped_array<index_t> postion_w;
+
+ /* The size of grad_w */
+
+ index_t size_w;
+
+ /* The gradient of v */
+
+ scoped_array<real_t> grad_v;
+
+ /* The position of grad_v */
+
+ scoped_array<index_t> position_v;
+
+ /* Optional. The field of grad_v, used by FFM */
+
+ scoped_array<int> field_v;
+
+ /* The size of grad_v */
+
+ index_t size_v;
 };
 
 /* -----------------------------------------------------------------------------
@@ -146,7 +173,7 @@ class Model {
   }
 
   /* Return a start pointer of w and its size. 
-     Used by LR, FM, and FFM */
+     Used by LR, FM, and FFM. */
 
   index_t GetW(real_t** pointer) { 
     *pointer = m_parameters.get();
@@ -154,7 +181,7 @@ class Model {
   }
 
   /* Return the start pointer of a vector for specified feature,
-     and return the size of this vector. Used by FM */
+     and return the size of this vector. Used by FM. */
 
   int GetV(real_t** pointer, int index) {
     // 0 <= index < m_feature_num
@@ -165,7 +192,7 @@ class Model {
   }
 
   /* Return the start pointer of a vector for specified feature 
-     and field, and return the size of this vector. Used by FFM */
+     and field, and return the size of this vector. Used by FFM. */
 
   int GetV(real_t** pointer, int index, int field) {
     // 0 <= index < m_feature_num
