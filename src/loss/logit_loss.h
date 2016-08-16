@@ -59,7 +59,9 @@ class LogitLoss : public Loss {
 
   void Predict(const DataMatrix& matrix,
                const Model& param,
-               std::vector<real_t>* pred);
+               std::vector<real_t>* pred) {
+
+  }
 
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return                      *
@@ -87,7 +89,9 @@ class LogitLoss : public Loss {
 
   void CalcGrad(const DataMatrix& matrix,
                 const Model& param,
-                SparseGrad* grad);
+                SparseGrad* grad) {
+    
+  }
 
  private: 
   DISALLOW_COPY_AND_ASSIGN(LogitLoss);
