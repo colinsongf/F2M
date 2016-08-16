@@ -32,4 +32,24 @@ This file defines the FM loss.
 
 #include "src/loss/loss.h"
 
+namespace f2m {
+
+class FMLoss : public Loss {
+ public:
+  ~FMLoss() {}
+
+  void Predict(const DataMatrix& matrix,
+ 	           const Model& param,
+ 	           std::vector<real_t>* pred);
+
+  void CalcGrad(const DataMatrix& matrix,
+ 	            const Model& param,
+ 	            SparseGrad* grad);
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(FMLoss);
+};
+
+} // namespace f2m
+
 #endif // F2M_LOSS_FM_LOSS_H_

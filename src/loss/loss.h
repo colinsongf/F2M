@@ -35,11 +35,10 @@ core part of ML algorithms.
 namespace f2m {
 
 /* -----------------------------------------------------------------------------
- * The basic class of a loss function.                                          *
+ * The basic class of loss function.                                            *
  * Loss is an abstract class,  which can be implemented by real loss functions  *
  * such as logistic regresiion loss (logit_loss.h), FM loss (fm_loss.h),        *
  * and FFM loss (ffm_loss.h).                                                   *
- * The Loss class can be used in both classification and regression tasks.      *
  * -----------------------------------------------------------------------------
  */
 
@@ -50,14 +49,13 @@ class Loss {
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return the prediction       *
    * results. Note that the prediction result is represented as a real          *
-   * number (float point type) in both classification and                       *
-   * regression problems.                                                       *
+   * number (float point type) in problems.                                     *
    * ---------------------------------------------------------------------------
    */
 
   virtual void Predict(const DataMatrix& matrix, 
                        const Model& param,
-                       std::vector<int>* pred) = 0;
+                       std::vector<real_t>* pred) = 0;
 
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return                      *
@@ -76,8 +74,8 @@ class Loss {
    * ---------------------------------------------------------------------------
    */
 
-  virtual real_t Evaluate(const std::vector<int>& pred,
-                          const std::vector<int>& label) const {
+  virtual real_t Evaluate(const std::vector<real_t>& pred,
+                          const std::vector<real_t>& label) const {
     real_t objv = 0.0;
     for (size_t i = 0; i < pred.size(); ++i) {
       // normalize y to -1 and 1.

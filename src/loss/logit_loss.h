@@ -59,7 +59,7 @@ class LogitLoss : public Loss {
 
   void Predict(const DataMatrix& matrix,
                const Model& param,
-               std::vector<int>* pred);
+               std::vector<real_t>* pred);
 
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return                      *

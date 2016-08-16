@@ -71,7 +71,7 @@ struct SparseRow {
   /* y can be either -1 or 0 (for negative examples), 
      and 1 (for positive examples) */
 
-  int y;
+  real_t y;
 
   /* size of current row */
 
