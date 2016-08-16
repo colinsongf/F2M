@@ -93,8 +93,7 @@ typedef std::vector<SparseRow> DataMatrix;
  * SparseGrad is response for storing the calculated gradients.                 *
  *                                                                              *
  * Note that, for LR, we only need the grad_w, position_w, and size_w.          *
- * For FFM, we need all the fields in this data structure.                      *
- * For FM, we need all the fields in this data structure except field_v.        *
+ * For FFM and FM, we need all the fields in this data structure.               *
  * -----------------------------------------------------------------------------
  */
 
@@ -118,10 +117,6 @@ struct SparseGrad {
  /* The position of grad_v */
 
  scoped_array<index_t> position_v;
-
- /* Optional. The field of grad_v, used by FFM */
-
- scoped_array<int> field_v;
 
  /* The size of grad_v */
 
