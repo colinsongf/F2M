@@ -9,3 +9,6 @@ target_link_libraries(parser_test gtest_main ${LIBS})
 
 add_executable(model_test model_test.cc)
 target_link_libraries(model_test gtest_main ${LIBS})
+
+add_executable(linear_algebra_test linear_algebra_test.cc)
+target_link_libraries(linear_algebra_test gtest_main ${LIBS})

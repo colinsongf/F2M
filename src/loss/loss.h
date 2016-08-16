@@ -70,7 +70,7 @@ class Loss {
   /* ---------------------------------------------------------------------------
    * Given the prediction results and the true labels, return                   *
    * current loss value. Here we use LogLoss in default.                        *
-   * Note that y must be -1 or 1.                                               *
+   * Note y must be -1 (for negative examples) or 1 (for positive exampples).   *
    * ---------------------------------------------------------------------------
    */
 

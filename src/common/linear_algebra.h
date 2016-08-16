@@ -50,7 +50,7 @@ void SparseVectorDenseVectorTimes(const real_t* sparse_vector,
   *result = 0;
   for (int i = 0; i < vec_size; ++i) {
   	index_t idx = position[i];
-    result += sparse_vector[i] * dense_vector[idx]
+    *result += sparse_vector[i] * dense_vector[idx];
   }
 }
 
@@ -69,17 +69,17 @@ void SparseVectorDenseVectorTimes(const real_t* sparse_vector,
  */
 
 void SparseMatrixDenseVectorTimes(const DataMatrix& matrix, 
-	                              const real_t* vector,
+	                              const real_t* dense_vector,
 	                              std::vector<real_t>* result) {
-  CHECK_EQ(matrix.size(), result.size());
+  CHECK_EQ(matrix.size(), result->size());
   for (int row = 0; row < matrix.size(); ++row) {
   	real_t res = 0;
   	SparseVectorDenseVectorTimes(matrix[row].x.get(), 
   		                         matrix[row].position.get(),
   		                         matrix[row].size,
-  		                         vector,
+  		                         dense_vector,
   		                         &res);
-  	result[row] = res;
+  	(*result)[row] = res;
   }
 }
 

@@ -20,7 +20,12 @@ Copyright (c) 2016 by contributors.
 Author: Chao Ma (mctt90@gmail.com)
 
 This file provides the basic facilities to make the
-programming more convennient.
+programming more convennient, including:
+
+ 1. Logging facilities
+ 2. CHECKxxx macros
+ 3. DISALLOW_COPY_AND_ASSIGN macro
+
 */
 
 #ifndef F2M_COMMON_COMMON_H_
