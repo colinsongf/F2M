@@ -70,7 +70,7 @@ class Loss {
   /* ---------------------------------------------------------------------------
    * Given the prediction results and the true labels, return                   *
    * current loss value. Here we use LogLoss in default.                        *
-   * Note that, in this LogLoss, the y is -1, 0, or 1.                          *
+   * Note that y must be -1 or 1.                                               *
    * ---------------------------------------------------------------------------
    */
 
@@ -78,7 +78,6 @@ class Loss {
                           const std::vector<real_t>& label) const {
     real_t objv = 0.0;
     for (size_t i = 0; i < pred.size(); ++i) {
-      // normalize y to -1 and 1.
       real_t y = label[i] > 0 ? 1 : -1;
       objv += log(1 + exp(- y * pred[i]));
     }
