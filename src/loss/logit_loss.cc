@@ -39,21 +39,9 @@ This file implements the logit_loss.h
    * ---------------------------------------------------------------------------
    */
 
-  void Predict(const DMatrix& data_matrix,
-               const DSVector& model_param,
-               DSVector* pred) {
-  	// We must pre-allocate the pred vector.
-  	pred.resize(data_matrix.size());
-  	// for every row in a data matrix.
-  	for (int row = 0; row < data_matrix.size(); ++row) {
-  	  real_t value = 0.0;
-  	  // for every element in RowData.
-  	  for (int j = 0; j < data_matrix[row].feature_index_.size(); ++j) {
-  	  	index_t idx = data_matrix[row].feature_index_[j];
-  	  	value += data_matrix[row].feature_value_[j] * model_param.data_[index];
-  	  }
-  	  pred->data_[row] = value;
-  	}
+  void Predict(const DataMatrix& matrix,
+               const Model& param,
+               std::vector<int>* pred) {
   }
 
   /* ---------------------------------------------------------------------------
@@ -80,8 +68,8 @@ This file implements the logit_loss.h
    * ---------------------------------------------------------------------------
    */
 
-  void CalcGrad(const DMatrix& data_matrix,
-                const DSVector& model_param,
-                DSVector* grad) {
+  void CalcGrad(const DataMatrix& matrix,
+                const Model& param,
+                SparseVector* grad) {
 
   }

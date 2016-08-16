@@ -18,4 +18,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 /* 
 Copyright (c) 2016 by contributors.
 Author: Chao Ma (mctt90@gmail.com)
+
+This file defines the FM loss.
 */
+
+#ifndef F2M_LOSS_FM_LOSS_H_
+#define F2M_LOSS_FM_LOSS_H_
+
+#include <vector>
+
+#include "src/common/common.h"
+#include "src/common/data_structure.h"
+
+#include "src/loss/loss.h"
+
+#endif // F2M_LOSS_FM_LOSS_H_

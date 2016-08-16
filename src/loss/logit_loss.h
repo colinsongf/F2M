@@ -25,6 +25,8 @@ This file defines the logistic regression loss.
 #ifndef F2M_LOSS_LOGIT_LOSS_H_
 #define F2M_LOSS_LOGIT_LOSS_H_
 
+#include <vector>
+
 #include "src/common/common.h"
 #include "src/common/data_structure.h"
 
@@ -55,9 +57,9 @@ class LogitLoss : public Loss {
    * ---------------------------------------------------------------------------
    */
 
-  void Predict(const DMatrix& data_matrix,
-               const DSVector& model_param,
-               DSVector* pred);
+  void Predict(const DataMatrix& matrix,
+               const Model& param,
+               std::vector<int>* pred);
 
   /* ---------------------------------------------------------------------------
    * Given the input data matrix and current model, return                      *
@@ -83,9 +85,9 @@ class LogitLoss : public Loss {
    * ---------------------------------------------------------------------------
    */
 
-  void CalcGrad(const DMatrix& data_matrix,
-                const DSVector& model_param,
-                DSVector* grad);
+  void CalcGrad(const DataMatrix& matrix,
+                const Model& param,
+                SparseGrad* grad);
 
  private: 
   DISALLOW_COPY_AND_ASSIGN(LogitLoss);
