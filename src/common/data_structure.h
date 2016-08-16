@@ -68,8 +68,8 @@ struct SparseRow {
   
   scoped_array<int> field;
 
-  /* y can be -1 (for negative examples), 
-     or 1 (for positive examples) */
+  /* y can be either -1 or 0 (for negative examples), 
+     and 1 (for positive examples) */
 
   int y;
 
